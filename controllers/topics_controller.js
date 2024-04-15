@@ -1,5 +1,5 @@
 const { catchAsync } = require("../utils/utils");
-const { fetchTopics } = require("../models/topics.model");
+const { fetchTopics } = require("../models/topics_model");
 
 exports.getTopics = catchAsync(async (req, res, next) => {
   const topics = await fetchTopics();
