@@ -12,5 +12,5 @@ INSTRUCTIONS:
 
 To connect to the relevant database:
 
-- In .env.development, insert the code PGDATABASE=nc_news
-- In .env.test, insert the code PGDATABASE=nc_news_test
+- In .env.development, insert the code PGDATABASE=<database>
+- In .env.test, insert the code PGDATABASE=<database>\_test
