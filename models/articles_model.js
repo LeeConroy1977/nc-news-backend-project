@@ -21,4 +21,24 @@ async function fetchArticle(article_id) {
   return article.rows[0];
 }
 
-module.exports = { fetchArticle, fetchAllArticles };
+async function fetchArticleComments(article_id) {
+  const id = Number(article_id);
+
+  const articleComments = await db.query(
+    `
+  SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at DESC
+  `,
+    [id]
+  );
+  if (articleComments.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "Artical does not exist" });
+  }
+
+  return articleComments.rows;
+}
+
+module.exports = {
+  fetchArticle,
+  fetchAllArticles,
+  fetchArticleComments,
+};
