@@ -157,4 +157,68 @@ describe("tests for nc_news", () => {
         });
     });
   });
+  describe("/api/articles/:article_id/comments", () => {
+    test("GET:200 should return an array of comments of a matching article_id with correct array length and datatype", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ body }) => {
+          const { articleComments } = body;
+          expect(articleComments.length).toBe(11);
+          articleComments.forEach((comment) => {
+            expect(typeof comment.comment_id).toBe("number");
+            expect(typeof comment.votes).toBe("number");
+            expect(typeof comment.created_at).toBe("string");
+            expect(typeof comment.author).toBe("string");
+            expect(typeof comment.body).toBe("string");
+            expect(typeof comment.article_id).toBe("number");
+          });
+        });
+    });
+    test("GET:200 articleComments[0] should match given object", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ body }) => {
+          const { articleComments } = body;
+          expect(articleComments[0]).toMatchObject({
+            comment_id: 5,
+            body: "I hate streaming noses",
+            article_id: 1,
+            author: "icellusedkars",
+            votes: 0,
+            created_at: "2020-11-03T21:00:00.000Z",
+          });
+        });
+    });
+    test("GET:200 articleComments array should be sorted comments.created_at in descending order", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({ body }) => {
+          const { articleComments } = body;
+          expect(articleComments).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+    });
+    test("STATUS:404 Should return a custom err.status and err.msg", () => {
+      return request(app)
+        .get("/api/articles/9999/comments")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Artical does not exist");
+        });
+    });
+    test("STATUS:400 Should return 400 status with the err.msg 'Bad Request'", () => {
+      return request(app)
+        .get("/api/articles/string/comments")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
+        });
+    });
+  });
 });
