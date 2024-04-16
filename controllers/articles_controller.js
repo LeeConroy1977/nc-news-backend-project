@@ -1,5 +1,14 @@
 const { catchAsync } = require("../utils/utils");
-const { fetchArticle } = require("../models/articles_model");
+const { fetchArticle, fetchAllArticles } = require("../models/articles_model");
+
+exports.getAllArticles = catchAsync(async (req, res, next) => {
+  const articles = await fetchAllArticles();
+
+  return res.status(200).json({
+    status: "success",
+    articles,
+  });
+});
 
 exports.getArticle = catchAsync(async (req, res, next) => {
   const { article_id } = await req.params;
