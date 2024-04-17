@@ -26,7 +26,7 @@ async function updateArticle(article_id, inc_vote) {
     `UPDATE articles SET votes = ${incVotes} WHERE article_id = $1 RETURNING *`,
     [article_id]
   );
-  console.log(article.rows);
+
   return article.rows[0];
 }
 

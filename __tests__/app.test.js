@@ -188,7 +188,6 @@ describe("tests for nc_news", () => {
         .send(sentObject)
         .expect(200)
         .then(({ body }) => {
-          console.log(body);
           const { article } = body;
           expect(article).toMatchObject({
             article_id: 1,
@@ -212,7 +211,6 @@ describe("tests for nc_news", () => {
         .send(sentObject)
         .expect(404)
         .then(({ body }) => {
-          console.log(body);
           const { msg } = body;
           expect(msg).toBe("Artical does not exist");
         });
@@ -226,7 +224,6 @@ describe("tests for nc_news", () => {
         .send(sentObject)
         .expect(400)
         .then(({ body }) => {
-          console.log(body);
           const { msg } = body;
           expect(msg).toBe("Bad Request");
         });
@@ -240,7 +237,6 @@ describe("tests for nc_news", () => {
         .send(sentObject)
         .expect(400)
         .then(({ body }) => {
-          console.log(body);
           const { msg } = body;
           expect(msg).toBe("Bad Request");
         });
@@ -343,7 +339,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
-    test.only("POST:400 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
+    test("POST:400 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
       const sentObject = {
         username: "icellusedkars",
         body: "This is an article comment!",
