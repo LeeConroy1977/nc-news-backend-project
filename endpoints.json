@@ -60,5 +60,20 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:articles_id/comments": {
+    "description": "serves a formatted object and adds a comment to the selected article",
+    "queries": [],
+    "exampleResponse": {
+      "articleComments": [
+        {
+          "body": "Lobster pot",
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id": 1,
+          "created_at": 1589577540000
+        }
+      ]
+    }
   }
 }
