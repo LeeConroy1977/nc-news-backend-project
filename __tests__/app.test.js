@@ -220,5 +220,81 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+    test("POST:201 should return posted object properties and values and the default properties and values of the object", () => {
+      const sentObject = {
+        username: "icellusedkars",
+        body: "This is an article comment!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(sentObject)
+        .expect(201)
+        .then(({ body }) => {
+          const { comment } = body;
+          expect(comment).toMatchObject({
+            comment_id: 19,
+            body: "This is an article comment!",
+            article_id: 2,
+            author: "icellusedkars",
+            votes: 0,
+            created_at: expect.any(String),
+          });
+        });
+    });
+    test("POST:400 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
+      const sentObject = {
+        username: "icellusedkars",
+        body: "This is an article comment!",
+      };
+      return request(app)
+        .post("/api/articles/100/comments")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
+        });
+    });
+    test("POST:400 should return 404 when the posted object properties are the incorrect amount ", () => {
+      const sentObject = {
+        body: "This is an article comment!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("invalid object");
+        });
+    });
+    test("POST:400 should return 404 when the posted object properties are the incorrect", () => {
+      const sentObject = {
+        user: "icellusedkars",
+        body: "This is an article comment!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("invalid properties");
+        });
+    });
+    test("POST:400 should return 404 when the posted object values are the incorrect data-type ", () => {
+      const sentObject = {
+        username: 118,
+        body: "This is an article comment!",
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("invalid value data-type");
+        });
+    });
   });
 });

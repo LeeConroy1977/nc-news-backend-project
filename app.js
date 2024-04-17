@@ -5,6 +5,10 @@ const topicsRouter = require("./routes/topics_router");
 const apiRouter = require("./routes/api_router");
 const articlesRouter = require("./routes/articles_router");
 
+// Middleware
+
+app.use(express.json());
+
 // Routes
 
 app.use("/api/topics", topicsRouter);

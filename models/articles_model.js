@@ -8,11 +8,9 @@ async function fetchAllArticles() {
 }
 
 async function fetchArticle(article_id) {
-  const id = Number(article_id);
-
   const article = await db.query(
     `SELECT * FROM articles WHERE article_id = $1`,
-    [id]
+    [article_id]
   );
   if (article.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Artical does not exist" });
@@ -21,24 +19,20 @@ async function fetchArticle(article_id) {
   return article.rows[0];
 }
 
-async function fetchArticleComments(article_id) {
-  const id = Number(article_id);
-
-  const articleComments = await db.query(
-    `
-  SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at DESC
-  `,
-    [id]
+async function checkArticleExists(article_id) {
+  const article = await db.query(
+    `SELECT * FROM articles WHERE article_id = $1`,
+    [article_id]
   );
-  if (articleComments.rows.length === 0) {
+  if (article.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Artical does not exist" });
   }
 
-  return articleComments.rows;
+  return article.rows[0];
 }
 
 module.exports = {
   fetchArticle,
   fetchAllArticles,
-  fetchArticleComments,
+  checkArticleExists,
 };
