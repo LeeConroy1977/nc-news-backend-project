@@ -27,6 +27,69 @@
       ]
     }
   },
+  "GET /api/articles?topic=<query-value>": {
+    "description": "serves an array of all articles filtered by a topic value",
+    "query values": ["mitch", "cats", "paper"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "author": "icellusedkars",
+          "title": "Eight pug gifs that remind me of mitch",
+          "article_id": 3,
+          "topic": "mitch",
+          "created_at": "2020-11-03T09:12:00.000Z",
+          "votes": 0,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          "comment_count": 2
+        }
+      ]
+    }
+  },
+  "GET /api/articles?sorted_by=<query-value>": {
+    "description": "serves an array of all articles sorted by a sorted_by value",
+    "query values": [
+      "article_id",
+      "title",
+      "topic",
+      "author",
+      "body",
+      "created_at",
+      "votes"
+    ],
+    "exampleResponse": {
+      "articles": [
+        {
+          "author": "rogersop",
+          "title": "Student SUES Mitch!",
+          "article_id": 4,
+          "topic": "mitch",
+          "created_at": "2020-05-06T01:14:00.000Z",
+          "votes": 0,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          "comment_count": 0
+        }
+      ]
+    }
+  },
+  "GET /api/articles?order=<query-value>": {
+    "description": "serves an array of all articles ordered in ascending or descending order",
+    "query values": ["asc", "desc"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "author": "rogersop",
+          "title": "Student SUES Mitch!",
+          "article_id": 4,
+          "topic": "mitch",
+          "created_at": "2020-05-06T01:14:00.000Z",
+          "votes": 0,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          "comment_count": 0
+        }
+      ]
+    }
+  },
+
   "GET /api/articles/:articles_id": {
     "description": "serves an array with an object with the matching articles_id",
     "queries": [],

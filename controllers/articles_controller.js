@@ -7,21 +7,13 @@ const {
 } = require("../models/articles_model");
 
 exports.getAllArticles = catchAsync(async (req, res, next) => {
-  const isQuery = await req.query;
-  if (isQuery) {
-    const articles = await fetchAllArticles(isQuery);
-    return res.status(200).json({
-      status: "success",
-      articles,
-    });
-  }
-  if (!isQuery) {
-    const articles = await fetchAllArticles();
-    return res.status(200).json({
-      status: "success",
-      articles,
-    });
-  }
+  const { topic, sorted_by, order } = await req.query;
+
+  const articles = await fetchAllArticles(topic, sorted_by, order);
+  return res.status(200).json({
+    status: "success",
+    articles,
+  });
 });
 
 exports.getArticle = catchAsync(async (req, res, next) => {
