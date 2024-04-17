@@ -339,7 +339,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
-    test("POST:400 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
+    test("POST:404 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
       const sentObject = {
         username: "icellusedkars",
         body: "This is an article comment!",
@@ -380,7 +380,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
-    test("POST:400 should return 404 when the posted object values are the incorrect data-type ", () => {
+    test("POST:404 should return 404 when the posted object values are the incorrect data-type ", () => {
       const sentObject = {
         username: true,
         body: "This is an article comment!",
@@ -392,6 +392,29 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { msg } = body;
           expect(msg).toBe("Article cannot be found");
+        });
+    });
+  });
+  describe("/api/comments/comment_id", () => {
+    test("DELETE:204 should delete a comment with the given comment_id ", () => {
+      return request(app).delete("/api/comments/2").expect(204);
+    });
+    test("DELETE:404 should return a 404 with the error message 'comment does not exist' when deleting a comment that doesn't exist ", () => {
+      return request(app)
+        .delete("/api/comments/9999")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Comment does not exist");
+        });
+    });
+    test("DELETE:400 should return a 400 with the error message 'Bad Request' when deleting a comment with the wrong data type ", () => {
+      return request(app)
+        .delete("/api/comments/string")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
         });
     });
   });

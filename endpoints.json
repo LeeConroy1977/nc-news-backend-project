@@ -93,5 +93,9 @@
         }
       ]
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "Deletes a comment with a comment_id",
+    "queries": []
   }
 }
