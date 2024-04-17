@@ -1,22 +1,20 @@
 const db = require("../db/connection");
 
 async function fetchAllArticles(isQuery) {
-  const queryKey = Object.keys(isQuery);
   isQuery = isQuery.topic;
-  if (!queryKey.includes("topic")) {
-    return Promise.reject({ status: 400, msg: "Invalid query" });
-  }
-  if (!["mitch", "cats", "paper"].includes(isQuery)) {
-    return Promise.reject({ status: 400, msg: "Invalid query" });
+  if (isQuery) {
+    if (!["mitch", "cats", "paper"].includes(isQuery)) {
+      return Promise.reject({ status: 400, msg: "Invalid query" });
+    }
   }
 
   let queryArray = [];
   let queryStr = `SELECT articles.author,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
   if (isQuery) {
-    queryStr += `WHERE articles.topic = $1 `;
     queryArray.push(isQuery);
+    queryStr += `WHERE articles.topic = $1 `;
   }
-  queryStr += ` GROUP BY articles.article_id ORDER BY articles.created_at DESC`;
+  queryStr += `GROUP BY articles.article_id ORDER BY articles.created_at DESC`;
 
   const articles = await db.query(queryStr, queryArray);
   return articles.rows;
@@ -24,7 +22,7 @@ async function fetchAllArticles(isQuery) {
 
 async function fetchArticle(article_id) {
   const article = await db.query(
-    `SELECT * FROM articles WHERE article_id = $1`,
+    `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count FROM articles JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id`,
     [article_id]
   );
   if (article.rows.length === 0) {
