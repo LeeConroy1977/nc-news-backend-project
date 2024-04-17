@@ -1,5 +1,5 @@
 const { catchAsync } = require("../utils/utils");
-const { fetchAllUsers } = require("../models/users_model");
+const { fetchAllUsers, fetchUser } = require("../models/users_model");
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await fetchAllUsers();
@@ -7,5 +7,15 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   return res.status(200).json({
     status: "success",
     users,
+  });
+});
+
+exports.getUser = catchAsync(async (req, res, next) => {
+  const { username } = await req.params;
+  const user = await fetchUser(username);
+
+  return res.status(200).json({
+    status: "success",
+    user,
   });
 });

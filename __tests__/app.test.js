@@ -556,5 +556,28 @@ describe("tests for nc_news", () => {
           });
         });
     });
+    test("GET:200 should return a user", () => {
+      return request(app)
+        .get("/api/users/lurker")
+        .expect(200)
+        .then(({ body }) => {
+          const { user } = body;
+          expect(user).toMatchObject({
+            username: "lurker",
+            name: "do_nothing",
+            avatar_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          });
+        });
+    });
+    test("STATUS:404 Should return a custom err.status and err.msg", () => {
+      return request(app)
+        .get("/api/users/no-name")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("No user exist");
+        });
+    });
   });
 });
