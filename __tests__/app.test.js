@@ -116,6 +116,74 @@ describe("tests for nc_news", () => {
           });
         });
     });
+    test.only("GET:200 should return an array of articles to the client filtered by the query topic with the value 'mitch", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(12);
+          articles.forEach((article) => {
+            expect(typeof article.author).toBe("string");
+            expect(typeof article.title).toBe("string");
+            expect(typeof article.article_id).toBe("number");
+            expect(typeof article.topic).toBe("string");
+            expect(typeof article.created_at).toBe("string");
+            expect(typeof article.votes).toBe("number");
+            expect(typeof article.article_img_url).toBe("string");
+            expect(typeof article.comment_count).toBe("number");
+          });
+        });
+    });
+    test.only("GET:200 should return an array of articles filtered by 'cats'", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(1);
+          expect(articles[0]).toMatchObject({
+            author: "rogersop",
+            title: "UNCOVERED: catspiracy to bring down democracy",
+            article_id: 5,
+            topic: "cats",
+            created_at: "2020-08-03T13:14:00.000Z",
+            votes: 0,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            comment_count: 2,
+          });
+        });
+    });
+    test.only("GET:200 should return an empty array of articles filtered by 'paper'", () => {
+      return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(0);
+          expect(articles[0]).toBe(undefined);
+        });
+    });
+    test.only("GET:400 should return a status 400 when filtered by an incorrect value 'incorrect'", () => {
+      return request(app)
+        .get("/api/articles?topic=incorrect")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid query");
+        });
+    });
+
+    test.only("GET:400 should return a status 400 when filtered by an incorrect query propery 'topical'", () => {
+      return request(app)
+        .get("/api/articles?topical=mitch")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid query");
+        });
+    });
   });
 
   describe("/api/articles/:articles_id", () => {
