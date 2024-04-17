@@ -265,7 +265,7 @@ describe("tests for nc_news", () => {
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("invalid object");
+          expect(msg).toBe("Invalid Object");
         });
     });
     test("POST:400 should return 404 when the posted object properties are the incorrect", () => {
@@ -279,7 +279,7 @@ describe("tests for nc_news", () => {
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("invalid properties");
+          expect(msg).toBe("Invalid Object");
         });
     });
     test("POST:400 should return 404 when the posted object values are the incorrect data-type ", () => {
@@ -293,7 +293,7 @@ describe("tests for nc_news", () => {
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("invalid value data-type");
+          expect(msg).toBe("Bad Request");
         });
     });
   });
