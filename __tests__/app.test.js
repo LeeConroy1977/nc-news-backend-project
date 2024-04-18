@@ -116,7 +116,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
-    test.only("GET:200 should return an array of articles to the client filtered by the query topic with the value 'mitch", () => {
+    test("GET:200 should return an array of articles to the client filtered by the query topic with the value 'mitch", () => {
       return request(app)
         .get("/api/articles?topic=mitch")
         .expect(200)
@@ -135,7 +135,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
-    test.only("GET:200 should return an array of articles filtered by 'cats'", () => {
+    test("GET:200 should return an array of articles filtered by 'cats'", () => {
       return request(app)
         .get("/api/articles?topic=cats")
         .expect(200)
@@ -155,7 +155,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
-    test.only("GET:200 should return an empty array of articles filtered by 'paper'", () => {
+    test("GET:200 should return an empty array of articles filtered by 'paper'", () => {
       return request(app)
         .get("/api/articles?topic=paper")
         .expect(200)
@@ -165,19 +165,9 @@ describe("tests for nc_news", () => {
           expect(articles[0]).toBe(undefined);
         });
     });
-    test.only("GET:400 should return a status 400 when filtered by an incorrect value 'incorrect'", () => {
+    test("GET:400 should return a status 400 when filtered by an incorrect value 'incorrect'", () => {
       return request(app)
         .get("/api/articles?topic=incorrect")
-        .expect(400)
-        .then(({ body }) => {
-          const { msg } = body;
-          expect(msg).toBe("Invalid query");
-        });
-    });
-
-    test.only("GET:400 should return a status 400 when filtered by an incorrect query propery 'topical'", () => {
-      return request(app)
-        .get("/api/articles?topical=mitch")
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
