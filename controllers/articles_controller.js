@@ -24,14 +24,3 @@ exports.getArticle = catchAsync(async (req, res, next) => {
     article,
   });
 });
-
-exports.getArticleComments = catchAsync(async (req, res, next) => {
-  const { article_id } = await req.params;
-
-  const articleComments = await fetchArticleComments(article_id);
-
-  return res.status(200).json({
-    status: "success",
-    articleComments,
-  });
-});
