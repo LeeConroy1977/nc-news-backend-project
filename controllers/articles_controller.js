@@ -2,6 +2,7 @@ const { catchAsync } = require("../utils/utils");
 const {
   fetchArticle,
   fetchAllArticles,
+  createArticle,
   updateArticle,
   checkArticleExists,
 } = require("../models/articles_model");
@@ -21,6 +22,17 @@ exports.getArticle = catchAsync(async (req, res, next) => {
 
   const article = await fetchArticle(article_id);
   return res.status(200).json({
+    status: "success",
+    article,
+  });
+});
+
+exports.postArticle = catchAsync(async (req, res, next) => {
+  const { author, title, body, topic } = await req.body;
+
+  const article = await createArticle(author, title, body, topic);
+
+  return res.status(201).json({
     status: "success",
     article,
   });
