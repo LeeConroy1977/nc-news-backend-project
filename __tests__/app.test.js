@@ -264,7 +264,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
-    test.only("POST:400 should return 400 when the posted object properties are the incorrect", () => {
+    test("POST:400 should return 400 when the posted object properties are the incorrect", () => {
       const sentObject = {
         title: "Paper Cats",
         topic: "cats",
@@ -280,7 +280,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
-    test.only("POST:404 should return 400 when the posted object values to foreign keys do not match parent value ", () => {
+    test("POST:404 should return 400 when the posted object values to foreign keys do not match parent value ", () => {
       const sentObject = {
         title: "cats are great!",
         topic: "Thunder cats",
