@@ -224,6 +224,78 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid query");
         });
     });
+    test("POST:201 should return posted object properties and values and the default properties and values of the object", () => {
+      const sentObject = {
+        author: "icellusedkars",
+        title: "Paper Cats",
+        body: "This is an article!",
+        topic: "cats",
+      };
+      return request(app)
+        .post("/api/articles")
+        .send(sentObject)
+        .expect(201)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article).toMatchObject({
+            article_id: 14,
+            title: "Paper Cats",
+            topic: "cats",
+            author: "icellusedkars",
+            body: "This is an article!",
+            created_at: expect.any(String),
+            article_img_url: expect.any(String),
+            votes: 0,
+            comment_count: 0,
+          });
+        });
+    });
+
+    test("POST:400 should return 400 when the posted object properties are the incorrect amount ", () => {
+      const sentObject = {
+        body: "This is an article!",
+      };
+      return request(app)
+        .post("/api/articles")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid Object");
+        });
+    });
+    test.only("POST:400 should return 400 when the posted object properties are the incorrect", () => {
+      const sentObject = {
+        title: "Paper Cats",
+        topic: "cats",
+        username: "icellusedkars",
+        body: "This is an article!",
+      };
+      return request(app)
+        .post("/api/articles")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid Object");
+        });
+    });
+    test.only("POST:404 should return 400 when the posted object values to foreign keys do not match parent value ", () => {
+      const sentObject = {
+        title: "cats are great!",
+        topic: "Thunder cats",
+        author: "icellusedkars",
+        body: "This is an article!",
+      };
+      return request(app)
+        .post("/api/articles")
+        .send(sentObject)
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Article cannot be found");
+        });
+    });
   });
 
   describe("/api/articles/:articles_id", () => {

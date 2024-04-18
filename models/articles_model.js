@@ -51,6 +51,21 @@ async function fetchArticle(article_id) {
   return article.rows[0];
 }
 
+async function createArticle(author, title, body, topic, article_img_url) {
+  const valuesArray = [title, author, topic, body];
+  const values = article_img_url ? `($1,$2,$3,$4,$5)` : `($1,$2,$3,$4)`;
+  const columnsStr = `title, author, topic, body ${
+    article_img_url ? ", article_img_url" : ""
+  }`;
+  if (article_img_url) valuesArray.push(article_img_url);
+
+  const article = await db.query(
+    `INSERT INTO articles (${columnsStr}) VALUES ${values} RETURNING articles.*, (SELECT COUNT(article_id) FROM comments WHERE comments.article_id = articles.article_id)::INT AS comment_count `,
+    valuesArray
+  );
+  return article.rows[0];
+}
+
 async function updateArticle(article_id, inc_votes) {
   const article = await db.query(
     `UPDATE articles SET votes = votes + ${inc_votes} WHERE article_id = $1 RETURNING *`,
@@ -75,6 +90,7 @@ async function checkArticleExists(article_id) {
 module.exports = {
   fetchArticle,
   fetchAllArticles,
-  checkArticleExists,
+  createArticle,
   updateArticle,
+  checkArticleExists,
 };
