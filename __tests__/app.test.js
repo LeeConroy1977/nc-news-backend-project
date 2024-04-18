@@ -156,6 +156,104 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+    test("PATCH:200 should return a given article with an incremented votes value", () => {
+      const sentObject = {
+        inc_vote: 10,
+      };
+      return request(app)
+        .patch("/api/articles/1")
+        .send(sentObject)
+        .expect(200)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article).toMatchObject({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 110,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          });
+        });
+    });
+    test("PATCH:200 should return a given article with an decremented votes value", () => {
+      const sentObject = {
+        inc_vote: -10,
+      };
+      return request(app)
+        .patch("/api/articles/1")
+        .send(sentObject)
+        .expect(200)
+        .then(({ body }) => {
+          const { article } = body;
+          expect(article).toMatchObject({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 90,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          });
+        });
+    });
+    test("PATCH:404 should return a 404 error with the correct err.msg when passed a article that does not exist", () => {
+      const sentObject = {
+        inc_vote: 9999,
+      };
+      return request(app)
+        .patch("/api/articles/9999")
+        .send(sentObject)
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Artical does not exist");
+        });
+    });
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request when passed an endpoint of the incorrect data-type ", () => {
+      const sentObject = {
+        inc_vote: 999,
+      };
+      return request(app)
+        .patch("/api/articles/string")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
+        });
+    });
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request when passed an object with the incorrect properties ", () => {
+      const sentObject = {
+        vote: 999,
+      };
+      return request(app)
+        .patch("/api/articles/string")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
+        });
+    });
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request when passed an object with the incorrect value type ", () => {
+      const sentObject = {
+        vote: true,
+      };
+      return request(app)
+        .patch("/api/articles/string")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
+        });
+    });
   });
   describe("/api/articles/:article_id/comments", () => {
     test("GET:200 should return an array of comments of a matching article_id with correct array length and datatype", () => {
@@ -249,10 +347,10 @@ describe("tests for nc_news", () => {
       return request(app)
         .post("/api/articles/100/comments")
         .send(sentObject)
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Bad Request");
+          expect(msg).toBe("Article cannot be found");
         });
     });
     test("POST:400 should return 404 when the posted object properties are the incorrect amount ", () => {
@@ -284,16 +382,16 @@ describe("tests for nc_news", () => {
     });
     test("POST:400 should return 404 when the posted object values are the incorrect data-type ", () => {
       const sentObject = {
-        username: 118,
+        username: true,
         body: "This is an article comment!",
       };
       return request(app)
         .post("/api/articles/2/comments")
         .send(sentObject)
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Bad Request");
+          expect(msg).toBe("Article cannot be found");
         });
     });
   });

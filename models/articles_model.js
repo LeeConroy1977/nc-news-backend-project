@@ -19,6 +19,17 @@ async function fetchArticle(article_id) {
   return article.rows[0];
 }
 
+async function updateArticle(article_id, inc_vote) {
+  const { votes } = await fetchArticle(article_id);
+  const incVotes = votes + inc_vote;
+  const article = await db.query(
+    `UPDATE articles SET votes = ${incVotes} WHERE article_id = $1 RETURNING *`,
+    [article_id]
+  );
+
+  return article.rows[0];
+}
+
 async function checkArticleExists(article_id) {
   const article = await db.query(
     `SELECT * FROM articles WHERE article_id = $1`,
@@ -35,4 +46,5 @@ module.exports = {
   fetchArticle,
   fetchAllArticles,
   checkArticleExists,
+  updateArticle,
 };
