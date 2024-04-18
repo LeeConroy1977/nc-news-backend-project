@@ -51,11 +51,9 @@ async function fetchArticle(article_id) {
   return article.rows[0];
 }
 
-async function updateArticle(article_id, inc_vote) {
-  const { votes } = await fetchArticle(article_id);
-  const incVotes = votes + inc_vote;
+async function updateArticle(article_id, inc_votes) {
   const article = await db.query(
-    `UPDATE articles SET votes = ${incVotes} WHERE article_id = $1 RETURNING *`,
+    `UPDATE articles SET votes = votes + ${inc_votes} WHERE article_id = $1 RETURNING *`,
     [article_id]
   );
 

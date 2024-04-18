@@ -28,10 +28,10 @@ exports.getArticle = catchAsync(async (req, res, next) => {
 
 exports.patchArticle = catchAsync(async (req, res, next) => {
   const { article_id } = await req.params;
-  const { inc_vote } = await req.body;
+  const { inc_votes } = await req.body;
 
   const [article] = await Promise.all([
-    updateArticle(article_id, inc_vote),
+    updateArticle(article_id, inc_votes),
     checkArticleExists(article_id),
   ]);
 
