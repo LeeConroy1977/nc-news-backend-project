@@ -165,9 +165,59 @@ describe("tests for nc_news", () => {
           expect(articles[0]).toBe(undefined);
         });
     });
-    test("GET:400 should return a status 400 when filtered by an incorrect value 'incorrect'", () => {
+
+    test("GET:200 should return an array of articles filtered by topics, sorted by title and in ascending order", () => {
       return request(app)
-        .get("/api/articles?topic=incorrect")
+        .get("/api/articles?topic=mitch&sorted_by=title&order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(12);
+          expect(articles[0]).toMatchObject({
+            author: "icellusedkars",
+            title: "A",
+            article_id: 6,
+            topic: "mitch",
+            created_at: "2020-10-18T01:00:00.000Z",
+            votes: 0,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            comment_count: 1,
+          });
+        });
+    });
+    test("GET:200 should return an array of articles sorted by author in descending order ", () => {
+      return request(app)
+        .get("/api/articles?sorted_by=author")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(13);
+          expect(articles).toBeSortedBy("author", { descending: true });
+        });
+    });
+    test("GET:200 should return an array of articles sorted by created_at in ascending order ", () => {
+      return request(app)
+        .get("/api/articles?order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles.length).toBe(13);
+          expect(articles).toBeSortedBy("created_at", { ascending: true });
+        });
+    });
+    test("GET:400 should return a status 400 when sorted by an incorrect articles column", () => {
+      return request(app)
+        .get("/api/articles?sorted_by=user")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid query");
+        });
+    });
+    test("GET:400 should return a status 400 when sorted by an incorrect order value", () => {
+      return request(app)
+        .get("/api/articles?order=sideways")
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
