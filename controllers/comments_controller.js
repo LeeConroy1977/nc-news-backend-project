@@ -2,6 +2,8 @@ const { catchAsync } = require("../utils/utils");
 const {
   createComment,
   fetchArticleComments,
+  removeComment,
+  checkCommentExists,
 } = require("../models/comments_model");
 const { checkArticleExists } = require("../models/articles_model");
 
@@ -31,4 +33,19 @@ exports.postComment = catchAsync(async (req, res, next) => {
     status: "success",
     comment: comment,
   });
+});
+
+exports.deleteComment = catchAsync(async (req, res, next) => {
+  const { comment_id } = await req.params;
+
+  const isDeleted = await Promise.all([
+    checkCommentExists(comment_id),
+    removeComment(comment_id),
+  ]);
+
+  if (isDeleted) {
+    return res.status(204).json({
+      status: "success",
+    });
+  }
 });
