@@ -1,9 +1,24 @@
 const db = require("../db/connection");
 
-async function fetchAllArticles() {
-  const articles = await db.query(
-    `SELECT articles.author,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY articles.created_at DESC`
-  );
+async function fetchAllArticles(isQuery) {
+  const queryKey = Object.keys(isQuery);
+  isQuery = isQuery.topic;
+  if (!queryKey.includes("topic")) {
+    return Promise.reject({ status: 400, msg: "Invalid query" });
+  }
+  if (!["mitch", "cats", "paper"].includes(isQuery)) {
+    return Promise.reject({ status: 400, msg: "Invalid query" });
+  }
+
+  let queryArray = [];
+  let queryStr = `SELECT articles.author,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+  if (isQuery) {
+    queryStr += `WHERE articles.topic = $1 `;
+    queryArray.push(isQuery);
+  }
+  queryStr += ` GROUP BY articles.article_id ORDER BY articles.created_at DESC`;
+
+  const articles = await db.query(queryStr, queryArray);
   return articles.rows;
 }
 
