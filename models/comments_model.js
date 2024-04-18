@@ -23,6 +23,15 @@ async function createComment(body, article_id, username) {
   return comment.rows[0];
 }
 
+async function updateComment(comment_id, inc_votes) {
+  const article = await db.query(
+    `UPDATE comments SET votes = votes + ${inc_votes} WHERE comment_id = $1 RETURNING *`,
+    [comment_id]
+  );
+
+  return article.rows[0];
+}
+
 async function removeComment(comment_id) {
   return db.query(`DELETE FROM comments WHERE comments.comment_id = $1`, [
     comment_id,
@@ -45,6 +54,7 @@ async function checkCommentExists(comment_id) {
 module.exports = {
   fetchArticleComments,
   createComment,
+  updateComment,
   removeComment,
   checkCommentExists,
 };

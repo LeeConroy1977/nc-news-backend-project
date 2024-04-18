@@ -266,7 +266,7 @@ describe("tests for nc_news", () => {
     });
     test("PATCH:200 should return a given article with an incremented votes value", () => {
       const sentObject = {
-        inc_vote: 10,
+        inc_votes: 10,
       };
       return request(app)
         .patch("/api/articles/1")
@@ -289,7 +289,7 @@ describe("tests for nc_news", () => {
     });
     test("PATCH:200 should return a given article with an decremented votes value", () => {
       const sentObject = {
-        inc_vote: -10,
+        inc_votes: -10,
       };
       return request(app)
         .patch("/api/articles/1")
@@ -312,7 +312,7 @@ describe("tests for nc_news", () => {
     });
     test("PATCH:404 should return a 404 error with the correct err.msg when passed a article that does not exist", () => {
       const sentObject = {
-        inc_vote: 9999,
+        inc_votes: 9999,
       };
       return request(app)
         .patch("/api/articles/9999")
@@ -323,9 +323,9 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Artical does not exist");
         });
     });
-    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request when passed an endpoint of the incorrect data-type ", () => {
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an endpoint of the incorrect data-type ", () => {
       const sentObject = {
-        inc_vote: 999,
+        inc_votes: 999,
       };
       return request(app)
         .patch("/api/articles/string")
@@ -336,30 +336,30 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
-    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request when passed an object with the incorrect properties ", () => {
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect properties ", () => {
       const sentObject = {
-        vote: 999,
+        likes: 999,
       };
       return request(app)
-        .patch("/api/articles/string")
+        .patch("/api/articles/1")
         .send(sentObject)
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Bad Request");
+          expect(msg).toBe("Invalid Object");
         });
     });
-    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request when passed an object with the incorrect value type ", () => {
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect value type ", () => {
       const sentObject = {
-        vote: true,
+        votes: true,
       };
       return request(app)
-        .patch("/api/articles/string")
+        .patch("/api/articles/1")
         .send(sentObject)
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Bad Request");
+          expect(msg).toBe("Invalid Object");
         });
     });
   });
@@ -504,6 +504,103 @@ describe("tests for nc_news", () => {
     });
   });
   describe("/api/comments/comment_id", () => {
+    //patch
+
+    test("PATCH:200 should return a given comment with an incremented votes value", () => {
+      const sentObject = {
+        inc_votes: 10,
+      };
+      return request(app)
+        .patch("/api/comments/1")
+        .send(sentObject)
+        .expect(200)
+        .then(({ body }) => {
+          const { comment } = body;
+          expect(comment).toMatchObject({
+            comment_id: 1,
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            article_id: 9,
+            author: "butter_bridge",
+            votes: 26,
+            created_at: "2020-04-06T12:17:00.000Z",
+          });
+        });
+    });
+    test("PATCH:200 should return a given comment with an decremented votes value", () => {
+      const sentObject = {
+        inc_votes: -10,
+      };
+      return request(app)
+        .patch("/api/comments/1")
+        .send(sentObject)
+        .expect(200)
+        .then(({ body }) => {
+          const { comment } = body;
+          expect(comment).toMatchObject({
+            comment_id: 1,
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            article_id: 9,
+            author: "butter_bridge",
+            votes: 6,
+            created_at: "2020-04-06T12:17:00.000Z",
+          });
+        });
+    });
+    test("PATCH:404 should return a 404 error with the correct err.msg when passed a comment that does not exist", () => {
+      const sentObject = {
+        inc_votes: 9999,
+      };
+      return request(app)
+        .patch("/api/comments/9999")
+        .send(sentObject)
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Comment does not exist");
+        });
+    });
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an endpoint of the incorrect data-type ", () => {
+      const sentObject = {
+        inc_votes: 999,
+      };
+      return request(app)
+        .patch("/api/comments/string")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
+        });
+    });
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect properties ", () => {
+      const sentObject = {
+        likes: 999,
+      };
+      return request(app)
+        .patch("/api/comments/1")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid Object");
+        });
+    });
+    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect value type ", () => {
+      const sentObject = {
+        votes: true,
+      };
+      return request(app)
+        .patch("/api/comments/1")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid Object");
+        });
+    });
+
+    // delete
+
     test("DELETE:204 should delete a comment with the given comment_id ", () => {
       return request(app).delete("/api/comments/2").expect(204);
     });
