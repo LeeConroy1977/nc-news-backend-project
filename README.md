@@ -1,4 +1,4 @@
-<code style="color : red">Northcoders News API</code>
+# $${\color{Northcoders News API}Red}$$
 
 - INSTRUCTIONS:
 
