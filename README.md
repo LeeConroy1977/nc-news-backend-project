@@ -1,4 +1,4 @@
-# <code style="color : red">Northcoders News API</code>
+<code style="color : red">Northcoders News API</code>
 
 - INSTRUCTIONS:
 
