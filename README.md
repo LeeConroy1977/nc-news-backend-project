@@ -1,4 +1,4 @@
-<span style='backgroundColor=red'>xNorthcoders News API</span>
+# <span style='background-color=red'>xNorthcoders News API</span>
 
 INSTRUCTIONS:
 
