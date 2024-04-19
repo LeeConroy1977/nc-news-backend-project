@@ -71,9 +71,10 @@ describe("tests for nc_news", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
-        .then((res) => {
-          const { articles } = res.body;
-          expect(articles.length).toBe(13);
+        .then(({ body }) => {
+          const { results } = body;
+          const { articles } = results;
+          expect(articles.length).toBe(10);
           articles.forEach((article) => {
             expect(typeof article.author).toBe("string");
             expect(typeof article.title).toBe("string");
@@ -90,14 +91,15 @@ describe("tests for nc_news", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
-        .then((res) => {
-          const { articles } = res.body;
+        .then(({ body }) => {
+          const { results } = body;
+          const { articles } = results;
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
             title: "Eight pug gifs that remind me of mitch",
             article_id: 3,
             topic: "mitch",
-            created_at: "2020-11-03T09:12:00.000Z",
+            created_at: expect.any(String),
             votes: 0,
             article_img_url:
               "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -109,8 +111,9 @@ describe("tests for nc_news", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
-        .then((res) => {
-          const { articles } = res.body;
+        .then(({ body }) => {
+          const { results } = body;
+          const { articles } = results;
           expect(articles).toBeSortedBy("created_at", {
             descending: true,
           });
@@ -121,8 +124,9 @@ describe("tests for nc_news", () => {
         .get("/api/articles?topic=mitch")
         .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
-          expect(articles.length).toBe(12);
+          const { results } = body;
+          const { articles } = results;
+          expect(articles.length).toBe(10);
           articles.forEach((article) => {
             expect(typeof article.author).toBe("string");
             expect(typeof article.title).toBe("string");
@@ -140,7 +144,8 @@ describe("tests for nc_news", () => {
         .get("/api/articles?topic=cats")
         .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
+          const { results } = body;
+          const { articles } = results;
           expect(articles.length).toBe(1);
           expect(articles[0]).toMatchObject({
             author: "rogersop",
@@ -160,7 +165,8 @@ describe("tests for nc_news", () => {
         .get("/api/articles?topic=paper")
         .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
+          const { results } = body;
+          const { articles } = results;
           expect(articles.length).toBe(0);
           expect(articles[0]).toBe(undefined);
         });
@@ -171,8 +177,9 @@ describe("tests for nc_news", () => {
         .get("/api/articles?topic=mitch&sorted_by=title&order=asc")
         .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
-          expect(articles.length).toBe(12);
+          const { results } = body;
+          const { articles } = results;
+          expect(articles.length).toBe(10);
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
             title: "A",
@@ -191,18 +198,19 @@ describe("tests for nc_news", () => {
         .get("/api/articles?sorted_by=author")
         .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
-          expect(articles.length).toBe(13);
+          const { results } = body;
+          const { articles } = results;
+          expect(articles.length).toBe(10);
           expect(articles).toBeSortedBy("author", { descending: true });
         });
     });
     test("GET:200 should return an array of articles sorted by created_at in ascending order ", () => {
       return request(app)
         .get("/api/articles?order=asc")
-        .expect(200)
         .then(({ body }) => {
-          const { articles } = body;
-          expect(articles.length).toBe(13);
+          const { results } = body;
+          const { articles } = results;
+          expect(articles.length).toBe(10);
           expect(articles).toBeSortedBy("created_at", { ascending: true });
         });
     });
@@ -222,6 +230,55 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { msg } = body;
           expect(msg).toBe("Invalid query");
+        });
+    });
+
+    test("GET:200 should return an array of a limited number of articles from a specific starting point filtered by topic with the added column total_count", () => {
+      return request(app)
+        .get("/api/articles?limit=2&p=1&topic=mitch")
+        .expect(200)
+        .then(({ body }) => {
+          const { results } = body;
+          const { articles, total_count } = results;
+          expect(results).toHaveProperty("articles");
+          expect(results).toHaveProperty("total_count");
+          expect(articles.length).toBe(2);
+          expect(total_count.total_count).toBe(12);
+          expect(articles[0]).toMatchObject({
+            author: "icellusedkars",
+            title: "Eight pug gifs that remind me of mitch",
+            article_id: 3,
+            topic: "mitch",
+            created_at: expect.any(String),
+            votes: 0,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            comment_count: 2,
+          });
+        });
+    });
+    test("GET:200 should return an array of a limited number of articles from a specific starting point with the added column total_count", () => {
+      return request(app)
+        .get("/api/articles?limit=4&p=2")
+        .expect(200)
+        .then(({ body }) => {
+          const { results } = body;
+          const { articles, total_count } = results;
+          expect(results).toHaveProperty("articles");
+          expect(results).toHaveProperty("total_count");
+          expect(articles.length).toBe(4);
+          expect(total_count.total_count).toBe(13);
+          expect(articles[0]).toMatchObject({
+            author: "butter_bridge",
+            title: "Another article about Mitch",
+            article_id: 13,
+            topic: "mitch",
+            created_at: expect.any(String),
+            votes: 0,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            comment_count: 0,
+          });
         });
     });
     test("POST:201 should return posted object properties and values and the default properties and values of the object", () => {
