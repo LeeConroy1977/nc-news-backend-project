@@ -1,4 +1,4 @@
-# $${\color{red}**Northcoders News API**}$$
+# **$${\color{red}Northcoders News API}$$**
 
 - INSTRUCTIONS:
 
