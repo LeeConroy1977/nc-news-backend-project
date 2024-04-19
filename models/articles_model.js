@@ -3,7 +3,9 @@ const db = require("../db/connection");
 async function fetchAllArticles(
   topic,
   sorted_by = "created_at",
-  order = "desc"
+  order = "desc",
+  limit = 10,
+  p = 1
 ) {
   if (topic) {
     if (!["mitch", "cats", "paper"].includes(topic)) {
@@ -27,16 +29,31 @@ async function fetchAllArticles(
     return Promise.reject({ status: 400, msg: "Invalid query" });
   }
 
+  const offset = (p = 1 ? limit * (p - 1) : limit * p);
   let queryArray = [];
-  let queryStr = `SELECT articles.author,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+  let queryArrayTwo = [];
+
+  let queryStr = `
+
+  SELECT articles.author,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+
   if (topic) {
     queryArray.push(topic);
-    queryStr += `WHERE articles.topic = $1 `;
+    queryStr += `WHERE articles.topic = $1`;
   }
-  queryStr += `GROUP BY articles.article_id ORDER BY ${sorted_by} ${order}`;
+  queryStr += `GROUP BY articles.article_id ORDER BY ${sorted_by} ${order} LIMIT ${limit} OFFSET ${offset} `;
 
-  const articles = await db.query(queryStr, queryArray);
-  return articles.rows;
+  const articlesResponse = await db.query(queryStr, queryArray);
+
+  let queryStrTwo = `SELECT  count(articles.article_id)::INT AS total_count FROM articles `;
+  if (topic) {
+    queryArrayTwo.push(topic);
+    queryStrTwo += `WHERE articles.topic = $1`;
+  }
+  const countResponse = await db.query(queryStrTwo, queryArrayTwo);
+  articles = articlesResponse.rows;
+  total_count = countResponse.rows[0];
+  return { articles, total_count };
 }
 
 async function fetchArticle(article_id) {
