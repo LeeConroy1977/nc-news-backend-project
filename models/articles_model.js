@@ -55,7 +55,7 @@ async function fetchAllArticles(
   total_count = countResponse.rows[0];
   return { articles, total_count };
 }
--async function fetchArticle(article_id) {
+async function fetchArticle(article_id) {
   const article = await db.query(
     `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count FROM articles JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id`,
     [article_id]
@@ -65,7 +65,7 @@ async function fetchAllArticles(
   }
 
   return article.rows[0];
-};
+}
 
 async function createArticle(author, title, body, topic, article_img_url) {
   const valuesArray = [title, author, topic, body];
