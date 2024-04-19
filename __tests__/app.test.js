@@ -64,6 +64,53 @@ describe("tests for nc_news", () => {
           });
         });
     });
+    test.only("POST:201 should return posted object properties and values ", () => {
+      const sentObject = {
+        slug: "whales",
+        description: "Not Sharks!",
+      };
+      return request(app)
+        .post("/api/topics")
+        .send(sentObject)
+        .expect(201)
+        .then(({ body }) => {
+          const { topic } = body;
+          expect(topic).toHaveProperty("slug");
+          expect(topic).toHaveProperty("description");
+          expect(topic).toMatchObject({
+            slug: "whales",
+            description: "Not Sharks!",
+          });
+        });
+    });
+
+    test.only("POST:400 should return 400 when the posted object is missing a primary key value ", () => {
+      const sentObject = {
+        desciption: "Not sharks!",
+      };
+      return request(app)
+        .post("/api/topics")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid Object");
+        });
+    });
+    test.only("POST:400 should return 400 when the posted object keys are the inccorrect type", () => {
+      const sentObject = {
+        slug: "whales",
+        description: 9999,
+      };
+      return request(app)
+        .post("/api/articles")
+        .send(sentObject)
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Invalid Object");
+        });
+    });
   });
 
   describe("/api/articles", () => {
