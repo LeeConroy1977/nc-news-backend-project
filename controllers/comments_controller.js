@@ -10,9 +10,10 @@ const { checkArticleExists } = require("../models/articles_model");
 
 exports.getArticleComments = catchAsync(async (req, res, next) => {
   const { article_id } = await req.params;
+  const { limit, p } = await req.query;
 
   const [articleComments] = await Promise.all([
-    fetchArticleComments(article_id),
+    fetchArticleComments(article_id, limit, p),
     checkArticleExists(article_id),
   ]);
 
