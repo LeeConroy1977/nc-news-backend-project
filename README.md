@@ -1,4 +1,4 @@
-# Northcoders News API
+# <span style='backgroundColor=red'>xNorthcoders News API</span>
 
 INSTRUCTIONS:
 
@@ -12,7 +12,5 @@ INSTRUCTIONS:
 
 To connect to the relevant database:
 
-- In .env.development, insert the code PGDATABASE=<database>
-- In .env.test, insert the code PGDATABASE=<database>\_test
-
-Here's our logo (hover to see the title text):
+- In .env.development, insert the code PGDATABASE=
+- In .env.test, insert the code PGDATABASE=
