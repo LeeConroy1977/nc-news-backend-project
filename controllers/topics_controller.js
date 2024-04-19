@@ -1,5 +1,5 @@
 const { catchAsync } = require("../utils/utils");
-const { fetchTopics } = require("../models/topics_model");
+const { fetchTopics, createTopic } = require("../models/topics_model");
 
 exports.getTopics = catchAsync(async (req, res, next) => {
   const topics = await fetchTopics();
@@ -7,5 +7,15 @@ exports.getTopics = catchAsync(async (req, res, next) => {
   return res.status(200).json({
     status: "success",
     topics,
+  });
+});
+
+exports.postTopic = catchAsync(async (req, res, next) => {
+  const { slug, description } = await req.body;
+  const topic = await createTopic(slug, description);
+
+  return res.status(201).json({
+    status: "success",
+    topic,
   });
 });

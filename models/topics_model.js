@@ -5,4 +5,12 @@ async function fetchTopics() {
   return topics.rows;
 }
 
-module.exports = { fetchTopics };
+async function createTopic(slug, description) {
+  const topics = await db.query(
+    `INSERT INTO topics (slug,description) VALUES ($1,$2) RETURNING *`,
+    [slug, description]
+  );
+  return topics.rows[0];
+}
+
+module.exports = { fetchTopics, createTopic };
