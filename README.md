@@ -1,4 +1,4 @@
-# Northcoders News API ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `#f03c15`
+# <code style="color : name_color">Northcoders News API</code>
 
 - INSTRUCTIONS:
 
