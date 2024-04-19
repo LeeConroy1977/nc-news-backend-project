@@ -14,6 +14,8 @@ const {
 beforeEach(() => seed({ topicData, userData, articleData, commentData }));
 afterAll(() => db.end());
 
+// Invalid Endpoint
+
 describe("tests for nc_news", () => {
   describe("/api/topics", () => {
     test("STATUS:404 - should respond with a 404 error if the endpoint is invalid", () => {
@@ -26,25 +28,32 @@ describe("tests for nc_news", () => {
         });
     });
   });
+
+  // Api Endpoint
+
   describe("/api", () => {
     test("GET:200 should return identical data compared to the json file", () => {
       return request(app)
         .get("/api")
         .expect(200)
-        .then((res) => {
-          const data = res.body.data;
+        .then(({ body }) => {
+          const { data } = body;
           expect(data).toEqual(endpoints);
         });
     });
   });
 
+  // Topics Enpoint
+
   describe("/api/topics", () => {
+    // Get Request
+
     test("GET:200 sends an array of topics to the client with the correct length and datatype", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then((res) => {
-          const { topics } = res.body;
+        .then(({ body }) => {
+          const { topics } = body;
           expect(topics.length).toBe(3);
           topics.forEach((topic) => {
             expect(typeof topic.description).toBe("string");
@@ -56,14 +65,17 @@ describe("tests for nc_news", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then((res) => {
-          const { topics } = res.body;
+        .then(({ body }) => {
+          const { topics } = body;
           expect(topics[0]).toMatchObject({
             description: "The man, the Mitch, the legend",
             slug: "mitch",
           });
         });
     });
+
+    // Post Request
+
     test("POST:201 should return posted object properties and values ", () => {
       const sentObject = {
         slug: "whales",
@@ -97,6 +109,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("POST:400 should return 400 when the posted object keys are the inccorrect type", () => {
       const sentObject = {
         slug: "whales",
@@ -113,7 +126,11 @@ describe("tests for nc_news", () => {
     });
   });
 
+  // Articles Endpoint
+
   describe("/api/articles", () => {
+    //Get Request
+
     test("GET:200 sends an array of articles to the client with the correct length and datatype", () => {
       return request(app)
         .get("/api/articles")
@@ -134,6 +151,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 articles[0] should match given object", () => {
       return request(app)
         .get("/api/articles")
@@ -154,6 +172,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 articles array should be sort by article.created_at in descending order", () => {
       return request(app)
         .get("/api/articles")
@@ -166,6 +185,9 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
+    // Ariticles Queries
+
     test("GET:200 should return an array of articles to the client filtered by the query topic with the value 'mitch", () => {
       return request(app)
         .get("/api/articles?topic=mitch")
@@ -186,6 +208,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 should return an array of articles filtered by 'cats'", () => {
       return request(app)
         .get("/api/articles?topic=cats")
@@ -207,6 +230,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 should return an empty array of articles filtered by 'paper'", () => {
       return request(app)
         .get("/api/articles?topic=paper")
@@ -240,6 +264,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 should return an array of articles sorted by author in descending order ", () => {
       return request(app)
         .get("/api/articles?sorted_by=author")
@@ -251,6 +276,7 @@ describe("tests for nc_news", () => {
           expect(articles).toBeSortedBy("author", { descending: true });
         });
     });
+
     test("GET:200 should return an array of articles sorted by created_at in ascending order ", () => {
       return request(app)
         .get("/api/articles?order=asc")
@@ -261,6 +287,7 @@ describe("tests for nc_news", () => {
           expect(articles).toBeSortedBy("created_at", { ascending: true });
         });
     });
+
     test("GET:400 should return a status 400 when sorted by an incorrect articles column", () => {
       return request(app)
         .get("/api/articles?sorted_by=user")
@@ -270,6 +297,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid query");
         });
     });
+
     test("GET:400 should return a status 400 when sorted by an incorrect order value", () => {
       return request(app)
         .get("/api/articles?order=sideways")
@@ -304,6 +332,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 should return an array of a limited number of articles from a specific starting point with the added column total_count", () => {
       return request(app)
         .get("/api/articles?limit=4&p=2")
@@ -328,6 +357,9 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
+    // Post Request
+
     test("POST:201 should return posted object properties and values and the default properties and values of the object", () => {
       const sentObject = {
         author: "icellusedkars",
@@ -368,6 +400,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("POST:400 should return 400 when the posted object properties are the incorrect", () => {
       const sentObject = {
         title: "Paper Cats",
@@ -384,6 +417,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("POST:404 should return 400 when the posted object values to foreign keys do not match parent value ", () => {
       const sentObject = {
         title: "cats are great!",
@@ -402,13 +436,17 @@ describe("tests for nc_news", () => {
     });
   });
 
+  // Articles Params Endpoint
+
   describe("/api/articles/:articles_id", () => {
+    // Get Request
+
     test("GET:200 should return a given article of a matching article_id", () => {
       return request(app)
         .get("/api/articles/5")
         .expect(200)
-        .then((res) => {
-          const { article } = res.body;
+        .then(({ body }) => {
+          const { article } = body;
           expect(article).toMatchObject({
             article_id: 5,
             title: "UNCOVERED: catspiracy to bring down democracy",
@@ -422,6 +460,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("STATUS:404 Should return a custom err.status and err.msg", () => {
       return request(app)
         .get("/api/articles/9999")
@@ -431,6 +470,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Artical does not exist");
         });
     });
+
     test("STATUS:400 Should return 400 status with the err.msg 'Bad Request'", () => {
       return request(app)
         .get("/api/articles/string")
@@ -440,6 +480,9 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+
+    // Patch Request
+
     test("PATCH:200 should return a given article with an incremented votes value", () => {
       const sentObject = {
         inc_votes: 10,
@@ -463,6 +506,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("PATCH:200 should return a given article with an decremented votes value", () => {
       const sentObject = {
         inc_votes: -10,
@@ -486,6 +530,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("PATCH:404 should return a 404 error with the correct err.msg when passed a article that does not exist", () => {
       const sentObject = {
         inc_votes: 9999,
@@ -499,6 +544,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Article does not exist");
         });
     });
+
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an endpoint of the incorrect data-type ", () => {
       const sentObject = {
         inc_votes: 999,
@@ -512,6 +558,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect properties ", () => {
       const sentObject = {
         likes: 999,
@@ -525,6 +572,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect value type ", () => {
       const sentObject = {
         votes: true,
@@ -539,6 +587,8 @@ describe("tests for nc_news", () => {
         });
     });
 
+    // Delete Request
+
     test("DELETE:204 should delete aan article with the given comment_id ", () => {
       return request(app).delete("/api/articles/2").expect(204);
     });
@@ -551,6 +601,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Article does not exist");
         });
     });
+
     test("DELETE:400 should return a 400 with the error message 'Bad Request' when deleting a comment with the wrong data type ", () => {
       return request(app)
         .delete("/api/articles/string")
@@ -561,7 +612,12 @@ describe("tests for nc_news", () => {
         });
     });
   });
+
+  // Article Comments Enpoint
+
   describe("/api/articles/:article_id/comments", () => {
+    // Get Request
+
     test("GET:200 should return an array of comments of a matching article_id with correct array length and datatype", () => {
       return request(app)
         .get("/api/articles/1/comments")
@@ -595,6 +651,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 articleComments array should be sorted comments.created_at in descending order", () => {
       return request(app)
         .get("/api/articles/1/comments")
@@ -606,6 +663,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("STATUS:404 Should return a custom err.status and err.msg", () => {
       return request(app)
         .get("/api/articles/9999/comments")
@@ -615,6 +673,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Article does not exist");
         });
     });
+
     test("STATUS:400 Should return 400 status with the err.msg 'Bad Request'", () => {
       return request(app)
         .get("/api/articles/string/comments")
@@ -624,6 +683,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+
     test("GET:200 should return an array of a limited number of comments from a specific starting point ", () => {
       return request(app)
         .get("/api/articles/1/comments?limit=3&p=1")
@@ -641,6 +701,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 should return an array of a limited number of articles from a specific starting point with increased page number", () => {
       return request(app)
         .get("/api/articles/1/comments?limit=2&p=2")
@@ -658,6 +719,9 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
+    // Post Request
+
     test("POST:201 should return posted object properties and values and the default properties and values of the object", () => {
       const sentObject = {
         username: "icellusedkars",
@@ -679,6 +743,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("POST:404 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
       const sentObject = {
         username: "icellusedkars",
@@ -693,6 +758,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Article cannot be found");
         });
     });
+
     test("POST:400 should return 404 when the posted object properties are the incorrect amount ", () => {
       const sentObject = {
         body: "This is an article comment!",
@@ -706,6 +772,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("POST:400 should return 404 when the posted object properties are the incorrect", () => {
       const sentObject = {
         user: "icellusedkars",
@@ -720,6 +787,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("POST:404 should return 404 when the posted object values are the incorrect data-type ", () => {
       const sentObject = {
         username: true,
@@ -735,8 +803,11 @@ describe("tests for nc_news", () => {
         });
     });
   });
+
+  // Comments Params Endpoint
+
   describe("/api/comments/comment_id", () => {
-    //patch
+    // Patch Request
 
     test("PATCH:200 should return a given comment with an incremented votes value", () => {
       const sentObject = {
@@ -758,6 +829,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("PATCH:200 should return a given comment with an decremented votes value", () => {
       const sentObject = {
         inc_votes: -10,
@@ -778,6 +850,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("PATCH:404 should return a 404 error with the correct err.msg when passed a comment that does not exist", () => {
       const sentObject = {
         inc_votes: 9999,
@@ -791,6 +864,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Comment does not exist");
         });
     });
+
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an endpoint of the incorrect data-type ", () => {
       const sentObject = {
         inc_votes: 999,
@@ -804,6 +878,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect properties ", () => {
       const sentObject = {
         likes: 999,
@@ -817,6 +892,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
+
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect value type ", () => {
       const sentObject = {
         votes: true,
@@ -831,11 +907,12 @@ describe("tests for nc_news", () => {
         });
     });
 
-    // delete
+    // Delete Request
 
     test("DELETE:204 should delete a comment with the given comment_id ", () => {
       return request(app).delete("/api/comments/2").expect(204);
     });
+
     test("DELETE:404 should return a 404 with the error message 'comment does not exist' when deleting a comment that doesn't exist ", () => {
       return request(app)
         .delete("/api/comments/9999")
@@ -845,6 +922,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Comment does not exist");
         });
     });
+
     test("DELETE:400 should return a 400 with the error message 'Bad Request' when deleting a comment with the wrong data type ", () => {
       return request(app)
         .delete("/api/comments/string")
@@ -856,7 +934,11 @@ describe("tests for nc_news", () => {
     });
   });
 
+  // Users Endpoint
+
   describe("/api/users", () => {
+    // Get Request
+
     test("GET:200 should return an array of all users", () => {
       return request(app)
         .get("/api/users")
@@ -871,6 +953,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 users[0] should match given object", () => {
       return request(app)
         .get("/api/users")
@@ -885,6 +968,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("GET:200 should return a user", () => {
       return request(app)
         .get("/api/users/lurker")
@@ -899,6 +983,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
+
     test("STATUS:404 Should return a custom err.status and err.msg", () => {
       return request(app)
         .get("/api/users/no-name")
