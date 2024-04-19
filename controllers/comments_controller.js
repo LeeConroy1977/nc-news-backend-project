@@ -17,8 +17,7 @@ exports.getArticleComments = catchAsync(async (req, res, next) => {
     checkArticleExists(article_id),
   ]);
 
-  return res.status(200).json({
-    status: "success",
+  return res.status(200).send({
     articleComments,
   });
 });
@@ -31,8 +30,7 @@ exports.postComment = catchAsync(async (req, res, next) => {
     createComment(body, article_id, username),
     checkArticleExists(article_id),
   ]);
-  return res.status(201).json({
-    status: "success",
+  return res.status(201).send({
     comment: comment,
   });
 });
@@ -46,8 +44,7 @@ exports.patchComment = catchAsync(async (req, res, next) => {
     checkCommentExists(comment_id),
   ]);
 
-  return res.status(200).json({
-    status: "success",
+  return res.status(200).send({
     comment,
   });
 });
@@ -61,8 +58,6 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
   ]);
 
   if (isDeleted) {
-    return res.status(204).json({
-      status: "success",
-    });
+    return res.status(204).send();
   }
 });

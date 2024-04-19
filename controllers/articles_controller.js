@@ -21,7 +21,7 @@ exports.getAllArticles = catchAsync(async (req, res, next) => {
 
   const { articles, total_count } = articlesResponse;
 
-  return res.status(200).json({
+  return res.status(200).send({
     status: "success",
     results: { articles, total_count },
   });
@@ -31,8 +31,7 @@ exports.getArticle = catchAsync(async (req, res, next) => {
   const { article_id } = await req.params;
 
   const article = await fetchArticle(article_id);
-  return res.status(200).json({
-    status: "success",
+  return res.status(200).send({
     article,
   });
 });
@@ -42,8 +41,7 @@ exports.postArticle = catchAsync(async (req, res, next) => {
 
   const article = await createArticle(author, title, body, topic);
 
-  return res.status(201).json({
-    status: "success",
+  return res.status(201).send({
     article,
   });
 });
@@ -57,8 +55,7 @@ exports.patchArticle = catchAsync(async (req, res, next) => {
     checkArticleExists(article_id),
   ]);
 
-  return res.status(200).json({
-    status: "success",
+  return res.status(200).send({
     article,
   });
 });
