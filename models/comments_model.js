@@ -9,7 +9,7 @@ async function fetchArticleComments(article_id, limit = 10, p = 1) {
     [article_id]
   );
   if (articleComments.rows.length === 0) {
-    return Promise.reject({ status: 404, msg: "Artical does not exist" });
+    return Promise.reject({ status: 404, msg: "Article does not exist" });
   }
 
   return articleComments.rows;

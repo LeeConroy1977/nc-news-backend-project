@@ -92,13 +92,22 @@ async function updateArticle(article_id, inc_votes) {
   return article.rows[0];
 }
 
+async function removeArticle(article_id) {
+  const article = await db.query(
+    `DELETE FROM articles WHERE articles.article_id = $1 RETURNING *`,
+    [article_id]
+  );
+
+  return article.rows[0];
+}
+
 async function checkArticleExists(article_id) {
   const article = await db.query(
     `SELECT * FROM articles WHERE article_id = $1`,
     [article_id]
   );
   if (article.rows.length === 0) {
-    return Promise.reject({ status: 404, msg: "Artical does not exist" });
+    return Promise.reject({ status: 404, msg: "Article does not exist" });
   }
 
   return article.rows[0];
@@ -109,5 +118,6 @@ module.exports = {
   fetchAllArticles,
   createArticle,
   updateArticle,
+  removeArticle,
   checkArticleExists,
 };
