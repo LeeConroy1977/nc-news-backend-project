@@ -29,7 +29,7 @@ async function fetchAllArticles(
     return Promise.reject({ status: 400, msg: "Invalid query" });
   }
 
-  const offset = (p = 1 ? limit * (p - 1) : limit * p);
+  const offset = p === 1 ? limit * (p - 1) : limit * p;
   let queryArray = [];
   let queryArrayTwo = [];
 

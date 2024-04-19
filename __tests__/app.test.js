@@ -246,14 +246,14 @@ describe("tests for nc_news", () => {
           expect(total_count.total_count).toBe(12);
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
-            title: "Eight pug gifs that remind me of mitch",
-            article_id: 3,
+            title: "Sony Vaio; or, The Laptop",
+            article_id: 2,
             topic: "mitch",
             created_at: expect.any(String),
             votes: 0,
             article_img_url:
               "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-            comment_count: 2,
+            comment_count: 0,
           });
         });
     });
@@ -269,9 +269,9 @@ describe("tests for nc_news", () => {
           expect(articles.length).toBe(4);
           expect(total_count.total_count).toBe(13);
           expect(articles[0]).toMatchObject({
-            author: "butter_bridge",
-            title: "Another article about Mitch",
-            article_id: 13,
+            author: "rogersop",
+            title: "Seven inspirational thought leaders from Manchester UK",
+            article_id: 10,
             topic: "mitch",
             created_at: expect.any(String),
             votes: 0,
@@ -499,7 +499,7 @@ describe("tests for nc_news", () => {
         .expect(200)
         .then(({ body }) => {
           const { articleComments } = body;
-          expect(articleComments.length).toBe(11);
+          expect(articleComments.length).toBe(10);
           articleComments.forEach((comment) => {
             expect(typeof comment.comment_id).toBe("number");
             expect(typeof comment.votes).toBe("number");
@@ -553,6 +553,40 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { msg } = body;
           expect(msg).toBe("Bad Request");
+        });
+    });
+    test("GET:200 should return an array of a limited number of comments from a specific starting point ", () => {
+      return request(app)
+        .get("/api/articles/1/comments?limit=3&p=1")
+        .expect(200)
+        .then(({ body }) => {
+          const { articleComments } = body;
+          expect(articleComments).toHaveLength(3);
+          expect(articleComments[0]).toMatchObject({
+            comment_id: 13,
+            body: "Fruit pastilles",
+            article_id: 1,
+            author: "icellusedkars",
+            votes: 0,
+            created_at: expect.any(String),
+          });
+        });
+    });
+    test("GET:200 should return an array of a limited number of articles from a specific starting point with increased page number", () => {
+      return request(app)
+        .get("/api/articles/1/comments?limit=2&p=2")
+        .expect(200)
+        .then(({ body }) => {
+          const { articleComments } = body;
+          expect(articleComments).toHaveLength(2);
+          expect(articleComments[0]).toMatchObject({
+            comment_id: 7,
+            body: "Lobster pot",
+            article_id: 1,
+            author: "icellusedkars",
+            votes: 0,
+            created_at: expect.any(String),
+          });
         });
     });
     test("POST:201 should return posted object properties and values and the default properties and values of the object", () => {

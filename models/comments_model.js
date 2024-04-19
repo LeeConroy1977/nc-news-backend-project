@@ -1,9 +1,10 @@
 const db = require("../db/connection");
 
-async function fetchArticleComments(article_id) {
+async function fetchArticleComments(article_id, limit = 10, p = 1) {
+  const offset = p === 1 ? limit * (p - 1) : limit * p;
   const articleComments = await db.query(
     `
-  SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at DESC
+  SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at DESC LIMIT ${limit} OFFSET ${offset}
   `,
     [article_id]
   );
