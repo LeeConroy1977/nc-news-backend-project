@@ -54,7 +54,7 @@ describe("tests for nc_news", () => {
         .expect(200)
         .then(({ body }) => {
           const { topics } = body;
-          expect(topics.length).toBe(3);
+          expect(topics).toHaveLength(3);
           topics.forEach((topic) => {
             expect(typeof topic.description).toBe("string");
             expect(typeof topic.slug).toBe("string");
@@ -138,7 +138,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(10);
+          expect(articles).toHaveLength(10);
           articles.forEach((article) => {
             expect(typeof article.author).toBe("string");
             expect(typeof article.title).toBe("string");
@@ -195,7 +195,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(10);
+          expect(articles).toHaveLength(10);
           articles.forEach((article) => {
             expect(typeof article.author).toBe("string");
             expect(typeof article.title).toBe("string");
@@ -216,7 +216,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(1);
+          expect(articles).toHaveLength(1);
           expect(articles[0]).toMatchObject({
             author: "rogersop",
             title: "UNCOVERED: catspiracy to bring down democracy",
@@ -238,7 +238,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(0);
+          expect(articles).toHaveLength(0);
           expect(articles[0]).toBe(undefined);
         });
     });
@@ -250,7 +250,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(10);
+          expect(articles).toHaveLength(10);
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
             title: "A",
@@ -272,7 +272,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(10);
+          expect(articles).toHaveLength(10);
           expect(articles).toBeSortedBy("author", { descending: true });
         });
     });
@@ -283,7 +283,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
-          expect(articles.length).toBe(10);
+          expect(articles).toHaveLength(10);
           expect(articles).toBeSortedBy("created_at", { ascending: true });
         });
     });
@@ -317,7 +317,7 @@ describe("tests for nc_news", () => {
           const { articles, total_count } = results;
           expect(results).toHaveProperty("articles");
           expect(results).toHaveProperty("total_count");
-          expect(articles.length).toBe(2);
+          expect(articles).toHaveLength(2);
           expect(total_count.total_count).toBe(12);
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
@@ -342,7 +342,7 @@ describe("tests for nc_news", () => {
           const { articles, total_count } = results;
           expect(results).toHaveProperty("articles");
           expect(results).toHaveProperty("total_count");
-          expect(articles.length).toBe(4);
+          expect(articles).toHaveLength(4);
           expect(total_count.total_count).toBe(13);
           expect(articles[0]).toMatchObject({
             author: "rogersop",
@@ -624,7 +624,7 @@ describe("tests for nc_news", () => {
         .expect(200)
         .then(({ body }) => {
           const { articleComments } = body;
-          expect(articleComments.length).toBe(10);
+          expect(articleComments).toHaveLength(10);
           articleComments.forEach((comment) => {
             expect(typeof comment.comment_id).toBe("number");
             expect(typeof comment.votes).toBe("number");
@@ -945,7 +945,7 @@ describe("tests for nc_news", () => {
         .expect(200)
         .then(({ body }) => {
           const { users } = body;
-          expect(users.length).toBe(4);
+          expect(users).toHaveLength(4);
           users.forEach((user) => {
             expect(typeof user.username).toBe("string");
             expect(typeof user.name).toBe("string");
@@ -958,8 +958,8 @@ describe("tests for nc_news", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
-        .then((res) => {
-          const { users } = res.body;
+        .then(({ body }) => {
+          const { users } = body;
           expect(users[0]).toMatchObject({
             username: "butter_bridge",
             name: "jonny",
