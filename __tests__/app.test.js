@@ -64,7 +64,7 @@ describe("tests for nc_news", () => {
           });
         });
     });
-    test.only("POST:201 should return posted object properties and values ", () => {
+    test("POST:201 should return posted object properties and values ", () => {
       const sentObject = {
         slug: "whales",
         description: "Not Sharks!",
@@ -84,7 +84,7 @@ describe("tests for nc_news", () => {
         });
     });
 
-    test.only("POST:400 should return 400 when the posted object is missing a primary key value ", () => {
+    test("POST:400 should return 400 when the posted object is missing a primary key value ", () => {
       const sentObject = {
         desciption: "Not sharks!",
       };
@@ -97,7 +97,7 @@ describe("tests for nc_news", () => {
           expect(msg).toBe("Invalid Object");
         });
     });
-    test.only("POST:400 should return 400 when the posted object keys are the inccorrect type", () => {
+    test("POST:400 should return 400 when the posted object keys are the inccorrect type", () => {
       const sentObject = {
         slug: "whales",
         description: 9999,
