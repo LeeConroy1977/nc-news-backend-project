@@ -183,6 +183,10 @@
       ]
     }
   },
+  "DELETE /api/articles/:article_id": {
+    "description": "Deletes an article with an article_id",
+    "queries": []
+  },
   "PATCH /api/comments/:comment_id": {
     "description": "Updates the vote count of an comment",
     "queries": [],

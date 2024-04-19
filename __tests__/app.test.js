@@ -496,7 +496,7 @@ describe("tests for nc_news", () => {
         .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Artical does not exist");
+          expect(msg).toBe("Article does not exist");
         });
     });
     test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an endpoint of the incorrect data-type ", () => {
@@ -536,6 +536,28 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { msg } = body;
           expect(msg).toBe("Invalid Object");
+        });
+    });
+
+    test("DELETE:204 should delete aan article with the given comment_id ", () => {
+      return request(app).delete("/api/articles/2").expect(204);
+    });
+    test("DELETE:404 should return a 404 with the error message 'Article does not exist' when deleting an article that doesn't exist ", () => {
+      return request(app)
+        .delete("/api/articles/9999")
+        .expect(404)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Article does not exist");
+        });
+    });
+    test("DELETE:400 should return a 400 with the error message 'Bad Request' when deleting a comment with the wrong data type ", () => {
+      return request(app)
+        .delete("/api/articles/string")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("Bad Request");
         });
     });
   });
@@ -590,7 +612,7 @@ describe("tests for nc_news", () => {
         .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Artical does not exist");
+          expect(msg).toBe("Article does not exist");
         });
     });
     test("STATUS:400 Should return 400 status with the err.msg 'Bad Request'", () => {

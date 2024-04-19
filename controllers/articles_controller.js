@@ -4,6 +4,7 @@ const {
   fetchAllArticles,
   createArticle,
   updateArticle,
+  removeArticle,
   checkArticleExists,
 } = require("../models/articles_model");
 
@@ -60,4 +61,15 @@ exports.patchArticle = catchAsync(async (req, res, next) => {
     status: "success",
     article,
   });
+});
+
+exports.deleteArticle = catchAsync(async (req, res, next) => {
+  const { article_id } = await req.params;
+
+  const [isDeleted] = await Promise.all([
+    removeArticle(article_id),
+    checkArticleExists(article_id),
+  ]);
+
+  return res.status(204).send();
 });
