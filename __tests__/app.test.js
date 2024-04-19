@@ -467,7 +467,7 @@ describe("tests for nc_news", () => {
         .expect(404)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Artical does not exist");
+          expect(msg).toBe("Article does not exist");
         });
     });
 

@@ -62,7 +62,7 @@ async function fetchArticle(article_id) {
     [article_id]
   );
   if (article.rows.length === 0) {
-    return Promise.reject({ status: 404, msg: "Artical does not exist" });
+    return Promise.reject({ status: 404, msg: "Article does not exist" });
   }
 
   return article.rows[0];
