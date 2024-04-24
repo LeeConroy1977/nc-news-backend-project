@@ -17,7 +17,7 @@ afterAll(() => db.end());
 // Invalid Endpoint
 
 describe("tests for nc_news", () => {
-  describe.only("/api/topics", () => {
+  describe("/api/topics", () => {
     test("STATUS:404 - should respond with a 404 error if the endpoint is invalid", () => {
       return request(app)
         .get("/api/9999")
