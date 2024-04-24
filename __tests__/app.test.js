@@ -744,7 +744,7 @@ describe("tests for nc_news", () => {
         });
     });
 
-    test("POST:404 should return a 400 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
+    test("POST:404 should return a 404 with the error message 'Bad Request' when posting to an article that doesn't exist ", () => {
       const sentObject = {
         username: "icellusedkars",
         body: "This is an article comment!",
