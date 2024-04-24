@@ -1,6 +1,6 @@
-# <span style='background-color=red'>xNorthcoders News API</span>
+# **$${\color{red}Northcoders News API}$$**
 
-INSTRUCTIONS:
+- INSTRUCTIONS:
 
 1. In the terminal:
 
