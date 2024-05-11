@@ -8,7 +8,7 @@ const {
   checkArticleExists,
 } = require("../models/articles_model");
 
-exports.getAllArticles = catchAsync(async (req, res, next) => {
+exports.getAllArticles = catchAsync(async (req, res) => {
   const { topic, sorted_by, order, limit, p } = await req.query;
 
   const articlesResponse = await fetchAllArticles(
@@ -27,7 +27,7 @@ exports.getAllArticles = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getArticle = catchAsync(async (req, res, next) => {
+exports.getArticle = catchAsync(async (req, res) => {
   const { article_id } = await req.params;
 
   const article = await fetchArticle(article_id);
@@ -36,7 +36,7 @@ exports.getArticle = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.postArticle = catchAsync(async (req, res, next) => {
+exports.postArticle = catchAsync(async (req, res) => {
   const { author, title, body, topic } = await req.body;
 
   const article = await createArticle(author, title, body, topic);
@@ -46,7 +46,7 @@ exports.postArticle = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.patchArticle = catchAsync(async (req, res, next) => {
+exports.patchArticle = catchAsync(async (req, res) => {
   const { article_id } = await req.params;
   const { inc_votes } = await req.body;
 
@@ -60,7 +60,7 @@ exports.patchArticle = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteArticle = catchAsync(async (req, res, next) => {
+exports.deleteArticle = catchAsync(async (req, res) => {
   const { article_id } = await req.params;
 
   const [isDeleted] = await Promise.all([

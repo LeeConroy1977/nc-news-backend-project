@@ -1,7 +1,7 @@
 const { catchAsync } = require("../utils/utils");
 const { fetchAllUsers, fetchUser } = require("../models/users_model");
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
+exports.getAllUsers = catchAsync(async (req, res) => {
   const users = await fetchAllUsers();
 
   return res.status(200).send({
@@ -9,7 +9,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = catchAsync(async (req, res, next) => {
+exports.getUser = catchAsync(async (req, res) => {
   const { username } = await req.params;
   const user = await fetchUser(username);
 

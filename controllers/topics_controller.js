@@ -1,7 +1,7 @@
 const { catchAsync } = require("../utils/utils");
 const { fetchTopics, createTopic } = require("../models/topics_model");
 
-exports.getTopics = catchAsync(async (req, res, next) => {
+exports.getTopics = catchAsync(async (req, res) => {
   const topics = await fetchTopics();
 
   return res.status(200).send({
@@ -9,7 +9,7 @@ exports.getTopics = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.postTopic = catchAsync(async (req, res, next) => {
+exports.postTopic = catchAsync(async (req, res) => {
   const { slug, description } = await req.body;
   const topic = await createTopic(slug, description);
 

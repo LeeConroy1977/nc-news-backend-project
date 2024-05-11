@@ -8,7 +8,7 @@ const {
 } = require("../models/comments_model");
 const { checkArticleExists } = require("../models/articles_model");
 
-exports.getArticleComments = catchAsync(async (req, res, next) => {
+exports.getArticleComments = catchAsync(async (req, res) => {
   const { article_id } = await req.params;
   const { limit, p } = await req.query;
 
@@ -22,7 +22,7 @@ exports.getArticleComments = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.postComment = catchAsync(async (req, res, next) => {
+exports.postComment = catchAsync(async (req, res) => {
   const { article_id } = await req.params;
   const { username, body } = await req.body;
 
@@ -35,7 +35,7 @@ exports.postComment = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.patchComment = catchAsync(async (req, res, next) => {
+exports.patchComment = catchAsync(async (req, res) => {
   const { comment_id } = await req.params;
   const { inc_votes } = await req.body;
 
@@ -49,7 +49,7 @@ exports.patchComment = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteComment = catchAsync(async (req, res, next) => {
+exports.deleteComment = catchAsync(async (req, res) => {
   const { comment_id } = await req.params;
 
   const isDeleted = await Promise.all([
