@@ -25,6 +25,7 @@ async function fetchAllArticles(
       "body",
       "created_at",
       "votes",
+      "comment_count",
     ].includes(sorted_by)
   ) {
     return Promise.reject({ status: 400, msg: "Invalid query" });
