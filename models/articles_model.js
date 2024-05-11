@@ -8,7 +8,11 @@ async function fetchAllArticles(
   p = 1
 ) {
   if (topic) {
-    if (!["mitch", "cats", "paper"].includes(topic)) {
+    if (
+      !["mitch", "cats", "paper", "football", "coding", "cooking"].includes(
+        topic
+      )
+    ) {
       return Promise.reject({ status: 400, msg: "Invalid query" });
     }
   }
