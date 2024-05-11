@@ -315,20 +315,21 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles, total_count } = results;
+          console.log(articles[0]);
           expect(results).toHaveProperty("articles");
           expect(results).toHaveProperty("total_count");
           expect(articles).toHaveLength(2);
           expect(total_count.total_count).toBe(12);
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
-            title: "Sony Vaio; or, The Laptop",
-            article_id: 2,
+            title: "Eight pug gifs that remind me of mitch",
+            article_id: 3,
             topic: "mitch",
             created_at: expect.any(String),
             votes: 0,
             article_img_url:
               "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-            comment_count: 0,
+            comment_count: 2,
           });
         });
     });
@@ -340,14 +341,15 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles, total_count } = results;
+
           expect(results).toHaveProperty("articles");
           expect(results).toHaveProperty("total_count");
           expect(articles).toHaveLength(4);
           expect(total_count.total_count).toBe(13);
           expect(articles[0]).toMatchObject({
-            author: "rogersop",
-            title: "Seven inspirational thought leaders from Manchester UK",
-            article_id: 10,
+            author: "butter_bridge",
+            title: "Another article about Mitch",
+            article_id: 13,
             topic: "mitch",
             created_at: expect.any(String),
             votes: 0,

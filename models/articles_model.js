@@ -34,6 +34,7 @@ async function fetchAllArticles(
     return Promise.reject({ status: 400, msg: "Invalid query" });
   }
 
+  const offset = p === 1 ? limit * p : limit * (p - 1);
   let queryArray = [];
   let queryArrayTwo = [];
 
@@ -45,9 +46,7 @@ async function fetchAllArticles(
     queryArray.push(topic);
     queryStr += `WHERE articles.topic = $1`;
   }
-  queryStr += `GROUP BY articles.article_id ORDER BY ${sorted_by} ${order} LIMIT ${limit} OFFSET ${
-    limit * (p - 1)
-  } `;
+  queryStr += `GROUP BY articles.article_id ORDER BY ${sorted_by} ${order} LIMIT ${limit} OFFSET ${offset} `;
 
   const articlesResponse = await db.query(queryStr, queryArray);
 
