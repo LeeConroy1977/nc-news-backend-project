@@ -5,7 +5,7 @@ async function fetchAllArticles(
   sorted_by = "created_at",
   order = "desc",
   limit = 10,
-  p = 0
+  p = 1
 ) {
   if (topic) {
     if (
@@ -34,11 +34,7 @@ async function fetchAllArticles(
     return Promise.reject({ status: 400, msg: "Invalid query" });
   }
 
-  let offset = 0;
-  if (p !== 0) {
-    offset = (p - 1) * limit;
-  }
-
+  const offset = p > 1 ? limit * (p - 1) : limit * p;
   let queryArray = [];
   let queryArrayTwo = [];
 
