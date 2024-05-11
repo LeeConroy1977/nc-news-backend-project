@@ -315,7 +315,6 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles, total_count } = results;
-          console.log(articles[0]);
           expect(results).toHaveProperty("articles");
           expect(results).toHaveProperty("total_count");
           expect(articles).toHaveLength(2);
@@ -341,7 +340,6 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles, total_count } = results;
-
           expect(results).toHaveProperty("articles");
           expect(results).toHaveProperty("total_count");
           expect(articles).toHaveLength(4);
