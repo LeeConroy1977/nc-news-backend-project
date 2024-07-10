@@ -110,7 +110,7 @@ describe("tests for nc_news", () => {
         });
     });
 
-    test("POST:400 should return 400 when the posted object keys are the inccorrect type", () => {
+    test("POST:400 should return 400 when the posted object keys are the incorrect type", () => {
       const sentObject = {
         slug: "whales",
         description: 9999,
@@ -138,10 +138,12 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
+          console.log(articles[0]);
           expect(articles).toHaveLength(10);
           articles.forEach((article) => {
             expect(typeof article.author).toBe("string");
             expect(typeof article.title).toBe("string");
+            expect(typeof article.featured).toBe("boolean");
             expect(typeof article.article_id).toBe("number");
             expect(typeof article.topic).toBe("string");
             expect(typeof article.created_at).toBe("string");
@@ -159,6 +161,7 @@ describe("tests for nc_news", () => {
         .then(({ body }) => {
           const { results } = body;
           const { articles } = results;
+          console.log(articles[0]);
           expect(articles[0]).toMatchObject({
             author: "icellusedkars",
             title: "Eight pug gifs that remind me of mitch",

@@ -9,9 +9,64 @@ async function fetchAllArticles(
 ) {
   if (topic) {
     if (
-      !["mitch", "cats", "paper", "football", "coding", "cooking"].includes(
-        topic
-      )
+      ![
+        "mitch",
+        "cats",
+        "paper",
+        "football",
+        "programming",
+        "cooking",
+        "architecture",
+        "art",
+        "filmmaking",
+        "performing arts",
+        "photography",
+        "advertising",
+        "entrepreneurship",
+        "marketing",
+        "careers",
+        "studying",
+        "accessories",
+        "beauty",
+        "fashion",
+        "recipes",
+        "vegan",
+        "action",
+        "comedy",
+        "drama",
+        "horror",
+        "romance",
+        "sci-fi",
+        "thriller",
+        "classical",
+        "dance",
+        "jazz",
+        "metal",
+        "pop",
+        "rock",
+        "hiking",
+        "fishing",
+        "nature",
+        "africa",
+        "asia",
+        "oceania",
+        "europe",
+        "north america",
+        "south america",
+        "baseball",
+        "cricket",
+        "golf",
+        "motor sports",
+        "rugby",
+        "A.I.",
+        "electronics",
+        "travel",
+        "holiday",
+        "aviation",
+        "boats",
+        "cars",
+        "motorcycles",
+      ].includes(topic)
     ) {
       return Promise.reject({ status: 400, msg: "Invalid query" });
     }
@@ -40,7 +95,7 @@ async function fetchAllArticles(
 
   let queryStr = `
 
-  SELECT articles.author,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+  SELECT articles.author,featured,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
 
   if (topic) {
     queryArray.push(topic);

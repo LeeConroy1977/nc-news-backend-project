@@ -39,6 +39,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       CREATE TABLE articles (
         article_id SERIAL PRIMARY KEY,
         title VARCHAR NOT NULL,
+        featured BOOL DEFAULT false,
         topic VARCHAR NOT NULL REFERENCES topics(slug),
         author VARCHAR NOT NULL REFERENCES users(username),
         body VARCHAR NOT NULL,
@@ -80,17 +81,27 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
     .then(() => {
       const formattedArticleData = articleData.map(convertTimestampToDate);
       const insertArticlesQueryStr = format(
-        "INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *;",
+        "INSERT INTO articles (title, featured, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *;",
         formattedArticleData.map(
           ({
             title,
+            featured,
             topic,
             author,
             body,
             created_at,
             votes = 0,
             article_img_url,
-          }) => [title, topic, author, body, created_at, votes, article_img_url]
+          }) => [
+            title,
+            featured,
+            topic,
+            author,
+            body,
+            created_at,
+            votes,
+            article_img_url,
+          ]
         )
       );
 
