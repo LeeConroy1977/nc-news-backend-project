@@ -95,7 +95,7 @@ async function fetchAllArticles(
 
   let queryStr = `
 
-  SELECT articles.author,featured,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+  SELECT articles.author,featured,articles.body,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
 
   if (topic) {
     queryArray.push(topic);
