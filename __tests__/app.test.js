@@ -142,6 +142,7 @@ describe("tests for nc_news", () => {
           expect(articles).toHaveLength(10);
           articles.forEach((article) => {
             expect(typeof article.author).toBe("string");
+            expect(typeof article.body).toBe("string");
             expect(typeof article.title).toBe("string");
             expect(typeof article.featured).toBe("boolean");
             expect(typeof article.article_id).toBe("number");
