@@ -1,7 +1,7 @@
 module.exports = [
   {
     title: "Running a Node App",
-    featured: false,
+    featured: true,
     topic: "programming",
     author: "jessjelly",
     body: "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
@@ -68,7 +68,7 @@ module.exports = [
   },
   {
     title: "Using React Native: One Year Later",
-    featured: false,
+    featured: true,
     topic: "programming",
     author: "tickle122",
     body: "When I interviewed for the iOS developer opening at Discord last spring, the tech lead Stanislav told me: React Native is the future. We will use it to build our iOS app from scratch as soon as it becomes public. As a native iOS developer, I strongly doubted using web technologies to build mobile apps because of my previous experiences with tools like PhoneGap. But after learning and using React Native for a while, I am glad we made that decision.",
@@ -356,7 +356,7 @@ module.exports = [
   },
   {
     title: "Seafood substitutions are increasing",
-    featured: false,
+    featured: true,
     topic: "cooking",
     author: "weegembump",
     body: "'SEAFOOD fraud is a serious global problem', begins a recent report from Oceana, an NGO. Reviewing over 200 studies in 55 countries, the report finds that one in five fish sold has been mislabelled. Although fish fraud is common early in the supply chain, most of it comes at the retail level. In 65% of cases, the motivation is economic—slippery restaurateurs frequently serve up cheaper fish than they advertise to cut costs. In America, Oceana has reported instances of tilapia being sold as the more expensive red snapper. Especially brazen fish criminals have invented new types of fish entirely. In Brazil, researchers were puzzled to find markets selling 'douradinha', ' non-existent species. Close inspection found that 60% of such fish were actually 'vulture' catfish, a relatively undesirable dish. Reports in America of catfish being substituted for more expensive fish date back to at least 2002; Oceana’s study suggests that the phenomenon is spreading.",
