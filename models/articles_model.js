@@ -116,6 +116,7 @@ async function fetchAllArticles(
   return { articles, total_count };
 }
 async function fetchArticle(article_id) {
+  console.log(article_id, "<<<<<<<<<<<<<<<<<<<<<");
   const article = await db.query(
     `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count FROM articles JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id`,
     [article_id]
@@ -138,9 +139,11 @@ async function createArticle(author, title, body, topic, article_img_url) {
   if (article_img_url) valuesArray.push(article_img_url);
 
   const article = await db.query(
-    `INSERT INTO articles (${columnsStr}) VALUES ${values} RETURNING articles.*`,
+    `INSERT INTO articles (${columnsStr}) VALUES ${values} RETURNING *`,
     valuesArray
   );
+
+  console.log("Created article with ID:", article.rows[0].article_id);
   return article.rows[0];
 }
 
