@@ -136,7 +136,7 @@ async function createArticle(author, title, body, topic, article_img_url) {
   if (article_img_url) valuesArray.push(article_img_url);
 
   const article = await db.query(
-    `INSERT INTO articles (${columnsStr}) VALUES ${values} RETURNING articles.*, (SELECT COUNT(article_id) FROM comments WHERE comments.article_id = articles.article_id)::INT AS comment_count `,
+    `INSERT INTO articles (${columnsStr}) VALUES ${values} RETURNING articles.*`,
     valuesArray
   );
   return article.rows[0];
