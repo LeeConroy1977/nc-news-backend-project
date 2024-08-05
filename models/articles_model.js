@@ -124,6 +124,8 @@ async function fetchArticle(article_id) {
     return Promise.reject({ status: 404, msg: "Article does not exist" });
   }
 
+  console.log("Fetched article:", article.rows[0]);
+
   return article.rows[0];
 }
 
