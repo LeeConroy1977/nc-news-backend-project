@@ -37,9 +37,15 @@ exports.getArticle = catchAsync(async (req, res) => {
 });
 
 exports.postArticle = catchAsync(async (req, res) => {
-  const { author, title, body, topic } = await req.body;
+  const { author, title, body, topic, article_img_url } = await req.body;
 
-  const article = await createArticle(author, title, body, topic);
+  const article = await createArticle(
+    author,
+    title,
+    body,
+    topic,
+    article_img_url
+  );
 
   return res.status(201).send({
     article,
