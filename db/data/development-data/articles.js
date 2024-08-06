@@ -68,7 +68,7 @@ module.exports = [
   },
   {
     title: "Using React Native: One Year Later",
-    featured: true,
+    featured: false,
     topic: "programming",
     author: "tickle122",
     body: "When I interviewed for the iOS developer opening at Discord last spring, the tech lead Stanislav told me: React Native is the future. We will use it to build our iOS app from scratch as soon as it becomes public. As a native iOS developer, I strongly doubted using web technologies to build mobile apps because of my previous experiences with tools like PhoneGap. But after learning and using React Native for a while, I am glad we made that decision.",
@@ -469,7 +469,7 @@ module.exports = [
   },
   {
     author: "grumpy19",
-    featured: false,
+    featured: true,
     body: "I was not kidding when I wrote that summary. Artificial Intelligence:AI is a very captivating and astonishing achievement from Steven Spielburg. And I do think it is one of his better movies along with Schindler's List, ET and Jaws. For one thing it is beautifully filmed; the cinematography was gorgeous and the special effects were absolutely jaw dropping. The direction is very refined, and while reminiscent of Pinocchio the story driving this film is resolutely dark, ambitious and even daring. The acting is extremely impressive. Haley Joel Osment proves that he is a fine child actor in a truly astonishing lead performance, and Jude Law in one of his better performance matches him perfectly as his protector. Many complained of the character of Monica, personally I had no problem with her and Frances O'Connor makes the most of what she is given. There is terrific support also from Brendan Gleeson and Robin Williams (as the voice of Dr Know). That teddy bear, voiced by Jack Angel, is really rather cute. Some of the film is intensely moving thanks to the remarkable and eerie score from John Williams, however there are some parts of the in-general well written screenplay that are close to over-sentimental. My only other complaint is that the feel-good ending felt rather tacked on. In conclusion, a rather bleak, ambitious but daring and compelling movie. 8.5/10 Bethany Cox",
     title: "Artificial Intelligence': Almost Brilliant",
 
