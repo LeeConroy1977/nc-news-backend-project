@@ -18,7 +18,7 @@ async function fetchAllArticles(
         "cooking",
         "architecture",
         "art",
-        "Literature",
+        "literature",
         "performing arts",
         "advertising",
         "entrepreneurship",
