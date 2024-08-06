@@ -467,4 +467,17 @@ module.exports = [
     article_img_url:
       "https://images.pexels.com/photos/774321/pexels-photo-774321.jpeg?w=700&h=700",
   },
+  {
+    author: "grumpy19",
+    featured: false,
+    body: "I was not kidding when I wrote that summary. Artificial Intelligence:AI is a very captivating and astonishing achievement from Steven Spielburg. And I do think it is one of his better movies along with Schindler's List, ET and Jaws. For one thing it is beautifully filmed; the cinematography was gorgeous and the special effects were absolutely jaw dropping. The direction is very refined, and while reminiscent of Pinocchio the story driving this film is resolutely dark, ambitious and even daring. The acting is extremely impressive. Haley Joel Osment proves that he is a fine child actor in a truly astonishing lead performance, and Jude Law in one of his better performance matches him perfectly as his protector. Many complained of the character of Monica, personally I had no problem with her and Frances O'Connor makes the most of what she is given. There is terrific support also from Brendan Gleeson and Robin Williams (as the voice of Dr Know). That teddy bear, voiced by Jack Angel, is really rather cute. Some of the film is intensely moving thanks to the remarkable and eerie score from John Williams, however there are some parts of the in-general well written screenplay that are close to over-sentimental. My only other complaint is that the feel-good ending felt rather tacked on. In conclusion, a rather bleak, ambitious but daring and compelling movie. 8.5/10 Bethany Cox",
+    title: "Artificial Intelligence': Almost Brilliant",
+
+    topic: "sci-fi",
+    created_at: 1584889100000,
+    votes: 0,
+    article_img_url:
+      "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDlMpfNjV81fpPSPv-QXxdaxicZETtyIwhyFqhE2218eMdUQPXv_PYAxeUh01jZUFSTAMSB49Uj1M0y0jm5eBUVGPz2DCGdeSBF2RWbCW7eeAcyJDrJSY5gq-3KFkDPE2hea8nNFtLQ3Ar/s1600/AI_teddybehinddavid.jpg",
+    comment_count: 0,
+  },
 ];
