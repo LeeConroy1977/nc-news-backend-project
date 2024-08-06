@@ -474,10 +474,23 @@ module.exports = [
     title: "Artificial Intelligence': Almost Brilliant",
 
     topic: "sci-fi",
-    created_at: 1584889100000,
+    created_at: 1684887100000,
     votes: 0,
     article_img_url:
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDlMpfNjV81fpPSPv-QXxdaxicZETtyIwhyFqhE2218eMdUQPXv_PYAxeUh01jZUFSTAMSB49Uj1M0y0jm5eBUVGPz2DCGdeSBF2RWbCW7eeAcyJDrJSY5gq-3KFkDPE2hea8nNFtLQ3Ar/s1600/AI_teddybehinddavid.jpg",
+    comment_count: 0,
+  },
+  {
+    author: "tickle122",
+    featured: true,
+    body: "Blade Runner’s larger coherence is embedded more in its design than its narrative. Across all the rewrites and double-digit takes by Scott, some mistakes or logical errors were bound to occur. Even in the Final Cut, released in 2007, we can see a sort of narrative problem after Deckard shoots Zhora, where he informs Bryant that there are three replicants left, something that Bryant informed him of to begin the narrative. Of course, mistakes like Zhora’s stunt double have been talked about to death, so I wont trouble you here. The combination of noir story and science fiction produces some fascinating ambiguities, more notably Deckard’s interrogation with his own identity as either a replicant or a human, as well as his sexual encounter with Rachael, which, while being stilted and favoring a noir-ish aggression from Deckard, has some implications for the narrative. Much of the script favors internal questions of identity, even when agency in identity is challenged, like when Batty confronts Hannibal and JF Sebastian. There is a great deal of time given over to eyes in the film, a leitmotif that serves to explore identity visually in an explicit way, while much of the film is of course an implicit interrogation of vision and seeing. All in all a fairly coherent film that has been mired in different tastes for the final product, either in the theatrical, director’s, or Final Cut, which imply certain insecurities in its construction. I think a 3 out of 5 fits.",
+    title: "Blade Runner (1982)",
+
+    topic: "sci-fi",
+    created_at: 1694887100000,
+    votes: 0,
+    article_img_url:
+      "https://c4.wallpaperflare.com/wallpaper/473/410/441/cyberpunk-cyber-dark-cyberpunk-movies-wallpaper-preview.jpg",
     comment_count: 0,
   },
 ];
