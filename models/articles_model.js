@@ -18,7 +18,7 @@ async function fetchAllArticles(
         "cooking",
         "architecture",
         "art",
-        "Literature",
+        "literature",
         "performing arts",
         "advertising",
         "entrepreneurship",
@@ -150,11 +150,15 @@ async function createArticle(author, title, body, topic, article_img_url) {
   return article.rows[0];
 }
 
-async function updateArticle(article_id, inc_votes) {
-  const article = await db.query(
-    `UPDATE articles SET votes = votes + ${inc_votes} WHERE article_id = $1 RETURNING *`,
-    [article_id]
-  );
+async function updateArticle(article_id, inc_votes = 0, featured = false) {
+  const query = `
+    UPDATE articles 
+    SET votes = votes + $2, 
+        featured = $3 
+    WHERE article_id = $1 
+    RETURNING *`;
+
+  const article = await db.query(query, [article_id, inc_votes, featured]);
 
   return article.rows[0];
 }
