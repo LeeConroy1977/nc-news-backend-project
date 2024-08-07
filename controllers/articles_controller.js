@@ -54,7 +54,7 @@ exports.postArticle = catchAsync(async (req, res) => {
 
 exports.patchArticle = catchAsync(async (req, res) => {
   const { article_id } = await req.params;
-  const { inc_votes } = await req.body;
+  const { inc_votes, featured } = await req.body;
 
   const [article] = await Promise.all([
     updateArticle(article_id, inc_votes),

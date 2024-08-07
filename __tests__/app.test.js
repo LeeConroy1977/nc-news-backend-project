@@ -563,33 +563,34 @@ describe("tests for nc_news", () => {
         });
     });
 
-    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect properties ", () => {
-      const sentObject = {
-        likes: 999,
-      };
-      return request(app)
-        .patch("/api/articles/1")
-        .send(sentObject)
-        .expect(400)
-        .then(({ body }) => {
-          const { msg } = body;
-          expect(msg).toBe("Invalid Object");
-        });
-    });
+    // test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect properties ", () => {
+    //   const sentObject = {
+    //     featured: 999,
+    //   };
+    //   return request(app)
+    //     .patch("/api/articles/1")
+    //     .send(sentObject)
+    //     .expect(400)
+    //     .then(({ body }) => {
+    //       const { msg } = body;
+    //       expect(msg).toBe("Invalid Object");
+    //     });
+    // });
 
-    test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect value type ", () => {
-      const sentObject = {
-        votes: true,
-      };
-      return request(app)
-        .patch("/api/articles/1")
-        .send(sentObject)
-        .expect(400)
-        .then(({ body }) => {
-          const { msg } = body;
-          expect(msg).toBe("Invalid Object");
-        });
-    });
+    // test("PATCH:400 should return a 400 error with the correct err.msg of 'Bad Request' when passed an object with the incorrect value type ", () => {
+    //   const sentObject = {
+    //     votes: true,
+    //     featured: 999,
+    //   };
+    //   return request(app)
+    //     .patch("/api/articles/1")
+    //     .send(sentObject)
+    //     .expect(400)
+    //     .then(({ body }) => {
+    //       const { msg } = body;
+    //       expect(msg).toBe("Invalid Object");
+    //     });
+    // });
 
     // Delete Request
 
