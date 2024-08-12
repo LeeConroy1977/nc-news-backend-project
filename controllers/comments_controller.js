@@ -36,8 +36,8 @@ exports.postComment = catchAsync(async (req, res) => {
 });
 
 exports.patchComment = catchAsync(async (req, res) => {
-  const { comment_id } = await req.params;
-  const { inc_votes } = await req.body;
+  
+  const {comment_id,  inc_votes } = await req.body;
 
   const [comment] = await Promise.all([
     updateComment(comment_id, inc_votes),
