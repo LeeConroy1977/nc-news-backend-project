@@ -157,15 +157,14 @@ async function createArticle(author, title, body, topic, article_img_url) {
   return article.rows[0];
 }
 
-async function updateArticle(article_id, inc_votes = 0, featured = false) {
+async function updateArticle(article_id, inc_votes = 0) {
   const query = `
     UPDATE articles 
-    SET votes = votes + $2, 
-        featured = $3 
+    SET votes = votes + $2
     WHERE article_id = $1 
     RETURNING *`;
 
-  const article = await db.query(query, [article_id, inc_votes, featured]);
+  const article = await db.query(query, [article_id, inc_votes]);
 
   return article.rows[0];
 }
