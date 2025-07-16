@@ -300,7 +300,7 @@ describe("tests for nc_news", () => {
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Invalid query");
+          expect(msg).toBe("Invalid sort_by query");
         });
     });
 
@@ -310,7 +310,7 @@ describe("tests for nc_news", () => {
         .expect(400)
         .then(({ body }) => {
           const { msg } = body;
-          expect(msg).toBe("Invalid query");
+          expect(msg).toBe("Invalid order query");
         });
     });
 

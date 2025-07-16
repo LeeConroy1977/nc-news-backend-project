@@ -7,76 +7,6 @@ async function fetchAllArticles(
   limit = 10,
   p = 1
 ) {
-  if (topic) {
-    if (
-      ![
-        "mitch",
-        "cats",
-        "paper",
-        "football",
-        "programming",
-        "cooking",
-        "architecture",
-        "art",
-        "performing arts",
-        "advertising",
-        "entrepreneurship",
-        "marketing",
-        "careers",
-        "studying",
-        "accessories",
-        "beauty",
-        "fashion",
-        "recipes",
-        "vegan",
-        "action games",
-        "adventure games",
-        "sports games",
-        "classics",
-        "dystopian fiction",
-        "fantasy",
-        "non-fiction",
-        "science fiction",
-        "action",
-        "comedy",
-        "drama",
-        "horror",
-        "romance",
-        "sci-fi",
-        "thriller",
-        "classical",
-        "dance",
-        "jazz",
-        "metal",
-        "pop",
-        "rock",
-        "hiking",
-        "fishing",
-        "nature",
-        "africa",
-        "asia",
-        "oceania",
-        "europe",
-        "north america",
-        "south america",
-        "baseball",
-        "cricket",
-        "golf",
-        "motor sports",
-        "rugby",
-        "A.I.",
-        "electronics",
-        "travel",
-        "holiday",
-        "aviation",
-        "boats",
-        "cars",
-        "motorcycles",
-      ].includes(topic)
-    ) {
-      return Promise.reject({ status: 400, msg: "Invalid query" });
-    }
-  }
   if (
     ![
       "article_id",
@@ -89,37 +19,67 @@ async function fetchAllArticles(
       "comment_count",
     ].includes(sorted_by)
   ) {
-    return Promise.reject({ status: 400, msg: "Invalid query" });
-  }
-  if (!["asc", "desc"].includes(order)) {
-    return Promise.reject({ status: 400, msg: "Invalid query" });
+    return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
   }
 
-  let offset = p === 1 ? 0 : limit * (p - 1);
+  if (!["asc", "desc"].includes(order.toLowerCase())) {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+
+  let normalizedTopic = topic ? topic.toLowerCase() : null;
+  if (normalizedTopic) {
+    const topicExists = await db.query(
+      `SELECT slug FROM topics WHERE LOWER(slug) = $1`,
+      [normalizedTopic]
+    );
+    if (topicExists.rows.length === 0) {
+      return Promise.reject({ status: 400, msg: `Invalid topic: ${topic}` });
+    }
+  }
+
+  const parsedLimit = parseInt(limit, 10) || 10;
+  const parsedPage = parseInt(p, 10) || 1;
+  if (parsedLimit < 1 || parsedPage < 1) {
+    return Promise.reject({ status: 400, msg: "Invalid limit or page query" });
+  }
+
+  let offset = parsedPage === 1 ? 0 : parsedLimit * (parsedPage - 1);
   let queryArray = [];
-  let queryArrayTwo = [];
-
   let queryStr = `
+    SELECT articles.author, articles.featured, articles.body, articles.title, 
+           articles.article_id, articles.topic, articles.created_at, articles.votes, 
+           articles.article_img_url, COUNT(comments.comment_id)::INT AS comment_count 
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id `;
 
-  SELECT articles.author,featured,articles.body,title,articles.article_id,articles.topic,articles.created_at,articles.votes,article_img_url, COUNT(comments)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
-
-  if (topic) {
-    queryArray.push(topic);
-    queryStr += `WHERE articles.topic = $1`;
+  if (normalizedTopic) {
+    queryArray.push(normalizedTopic);
+    queryStr += `WHERE LOWER(articles.topic) = $1 `;
   }
-  queryStr += `GROUP BY articles.article_id ORDER BY ${sorted_by} ${order} LIMIT ${limit} OFFSET ${offset} `;
 
-  const articlesResponse = await db.query(queryStr, queryArray);
+  const safeSortedBy = sorted_by.replace(/[^a-zA-Z_]/g, "");
+  queryStr += `GROUP BY articles.article_id ORDER BY ${safeSortedBy} ${order.toUpperCase()} LIMIT ${parsedLimit} OFFSET ${offset}`;
 
-  let queryStrTwo = `SELECT count(articles.article_id)::INT AS total_count FROM articles `;
-  if (topic) {
-    queryArrayTwo.push(topic);
-    queryStrTwo += `WHERE articles.topic = $1`;
+  try {
+    const articlesResponse = await db.query(queryStr, queryArray);
+
+    let queryStrTwo = `SELECT COUNT(articles.article_id)::INT AS total_count FROM articles `;
+    let queryArrayTwo = [];
+    if (normalizedTopic) {
+      queryArrayTwo.push(normalizedTopic);
+      queryStrTwo += `WHERE LOWER(articles.topic) = $1`;
+    }
+
+    const countResponse = await db.query(queryStrTwo, queryArrayTwo);
+
+    const articles = articlesResponse.rows;
+    const total_count = countResponse.rows[0] || { total_count: 0 };
+
+    return { articles, total_count };
+  } catch (error) {
+    console.error("Database query error:", error.message, error.stack);
+    throw { status: 500, msg: "Internal Server Error" };
   }
-  const countResponse = await db.query(queryStrTwo, queryArrayTwo);
-  articles = articlesResponse.rows;
-  total_count = countResponse.rows[0];
-  return { articles, total_count };
 }
 async function fetchArticle(article_id) {
   console.log(article_id, "<<<<<<<<<<<<<<<<<<<<<");
