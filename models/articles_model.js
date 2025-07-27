@@ -82,7 +82,6 @@ async function fetchAllArticles(
   }
 }
 async function fetchArticle(article_id) {
-  console.log(article_id, "<<<<<<<<<<<<<<<<<<<<<");
   const article = await db.query(
     `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count 
      FROM articles 
@@ -94,8 +93,6 @@ async function fetchArticle(article_id) {
   if (article.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Article does not exist" });
   }
-
-  console.log("Fetched article:", article.rows[0]);
 
   return article.rows[0];
 }
@@ -113,18 +110,38 @@ async function createArticle(author, title, body, topic, article_img_url) {
     valuesArray
   );
 
-  console.log("Created article with ID:", article.rows[0].article_id);
   return article.rows[0];
 }
 
-async function updateArticle(article_id, inc_votes = 0) {
+async function updateArticle(article_id, inc_votes, featured) {
+  const setClauses = [];
+  const values = [article_id];
+
+  if (inc_votes !== undefined) {
+    setClauses.push(`votes = votes + $${values.length + 1}`);
+    values.push(inc_votes);
+  }
+
+  if (featured !== undefined) {
+    setClauses.push(`featured = $${values.length + 1}`);
+    values.push(featured);
+  }
+
+  if (setClauses.length === 0) {
+    throw new Error("No valid fields to update");
+  }
+
   const query = `
     UPDATE articles 
-    SET votes = votes + $2
+    SET ${setClauses.join(", ")}
     WHERE article_id = $1 
     RETURNING *`;
 
-  const article = await db.query(query, [article_id, inc_votes]);
+  const article = await db.query(query, values);
+
+  if (article.rows.length === 0) {
+    throw new Error("Article not found");
+  }
 
   return article.rows[0];
 }

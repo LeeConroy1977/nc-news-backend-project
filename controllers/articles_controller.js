@@ -53,13 +53,31 @@ exports.postArticle = catchAsync(async (req, res) => {
 });
 
 exports.patchArticle = catchAsync(async (req, res) => {
-  const { article_id } = await req.params;
-  const { inc_votes } = await req.body;
+  const { article_id } = req.params;
+  const { inc_votes, featured } = req.body;
 
-  const [article] = await Promise.all([
-    updateArticle(article_id, inc_votes),
-    checkArticleExists(article_id),
-  ]);
+  const validKeys = ["inc_votes", "featured"];
+  const receivedKeys = Object.keys(req.body);
+  const hasInvalidKeys = receivedKeys.some((key) => !validKeys.includes(key));
+  const hasValidKeys =
+    receivedKeys.length > 0 &&
+    receivedKeys.every((key) => validKeys.includes(key));
+
+  if (hasInvalidKeys || !hasValidKeys) {
+    return res.status(400).send({ msg: "Invalid Object" });
+  }
+
+  if (inc_votes !== undefined && typeof inc_votes !== "number") {
+    return res.status(400).send({ msg: "Invalid Object" });
+  }
+
+  if (featured !== undefined && typeof featured !== "boolean") {
+    return res.status(400).send({ msg: "Invalid Object" });
+  }
+
+  await checkArticleExists(article_id);
+
+  const article = await updateArticle(article_id, inc_votes, featured);
 
   return res.status(200).send({
     article,
@@ -67,12 +85,17 @@ exports.patchArticle = catchAsync(async (req, res) => {
 });
 
 exports.deleteArticle = catchAsync(async (req, res) => {
-  const { article_id } = await req.params;
+  const { article_id } = req.params;
 
-  const [isDeleted] = await Promise.all([
-    removeArticle(article_id),
-    checkArticleExists(article_id),
-  ]);
+  const articleIdNum = parseInt(article_id, 10);
+  if (isNaN(articleIdNum)) {
+    throw { status: 400, msg: "Bad Request" };
+  }
+
+  await checkArticleExists(articleIdNum);
+
+
+  await removeArticle(articleIdNum);
 
   return res.status(204).send();
 });
